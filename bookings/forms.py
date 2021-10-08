@@ -1,4 +1,3 @@
-
 from bookings.models import EventGenre, EventCity, EventStatus
 from flask_wtf import FlaskForm
 from wtforms.fields import TextAreaField, SubmitField, StringField, PasswordField, BooleanField, DateTimeField

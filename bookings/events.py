@@ -1,7 +1,6 @@
 from bookings.views import my_events
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login.utils import login_required
-from flask_modals.modal import render_template_modal
 from .models import Event, Comment, EventCity, EventGenre, EventStatus, Booking
 from .forms import EditEventForm, EventForm, CommentForm, BookingForm
 from . import db
@@ -26,7 +25,7 @@ def show(id):
     events = Event.query.all()
     genres = EventGenre
     cities = EventCity
-    return render_template_modal('events/event_details.html', cities=cities, event=event, form=comments_form, booking_form=form, username=name, events_list=events, genres=genres)
+    return render_template('events/event_details.html', cities=cities, event=event, form=comments_form, booking_form=form, username=name, events_list=events, genres=genres)
 
 @eventbp.route('/view_all')
 def view_all_events():
