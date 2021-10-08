@@ -1,0 +1,138 @@
+html,
+body {
+  font-family: "Quicksand", sans-serif;
+}
+
+main {
+  padding-bottom: 40px;
+}
+
+.card {
+  max-height: 100%;
+}
+
+.card-img-top {
+  width: 100%;
+  min-height: 18vw;
+  object-fit: cover;
+}
+
+#index-cards {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+}
+
+.btn {
+  background-color: #6d7993;
+  border-color: #6d7993;
+  color: #ffffff;
+  border: 1px, solid;
+  margin-top: 0.5rem;
+  background-color: #96858f;
+}
+
+.control-label {
+  font-weight: 800;
+}
+
+.figure {
+  margin: auto;
+  display: block;
+}
+
+.navbar .navbar-dark .nav-item.active .nav-link,
+.navbar .navbar-dark .nav-item .nav-link:active,
+.navbar .navbar-dark .nav-item .nav-link:focus,
+.navbar .navbar-dark .nav-item:hover .nav-link {
+  color: #ffffff !important;
+}
+
+.navbar {
+  background-color: #6d7993;
+}
+
+/* .navbar-brand {
+    color: #96858F !important;
+}
+
+.nav-link{
+    color: #000000 !important;
+} */
+.border-bottom {
+  border-bottom: 1px solid #000000 !important;
+}
+.img-thumbnail {
+  max-height: 200px;
+}
+
+#search-button {
+  background-color: #6d7993;
+  margin: 0.25rem;
+}
+
+#page-container {
+  min-height: 70vh;
+}
+
+#book-button {
+  float: right;
+}
+
+#delete-button {
+  float: left;
+}
+
+#edit-button {
+  float: left;
+}
+
+#genre-images {
+  border: 1px solid black;
+  margin: auto;
+  display: block;
+  max-height: 200px;
+}
+
+/* new shit here */
+
+body {
+  background-color: #d5d5d5;
+  background-image: url("/static/images/bkgnd.png");
+}
+
+h1 {
+
+  font-weight: 900;
+  border-left: 10px solid #96858f;
+  padding-left: 10px;
+  margin-bottom: 30px;
+}
+
+.dropdown-menu {
+  background-color: #96858f;
+}
+
+.form-control {
+  max-width: 50%;
+}
+
+#text {
+  max-width: 50%;
+}
+
+#image {
+  margin: 0.5rem;
+  border-radius: 4px;
+}
+
+.img-thumbnail {
+  border-color: #9099a2;
+}
+
+#SearchForm {
+  max-width: 100%;
+}

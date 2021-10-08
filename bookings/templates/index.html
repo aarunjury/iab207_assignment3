@@ -1,0 +1,101 @@
+{% extends 'base.html' %} {% block content %}
+<br>
+<div id='page-container' class='container'>
+    <div class='row'>
+        <h1 class='display-5 fw-bold'>What's on in Brisbane...</h1>
+    </div>
+    <div class='row'>
+        <div id='whats-on-carousel' class='carousel slide' data-bs-ride='carousel'>
+            <div class='carousel-indicators'>
+                <button type='button' data-bs-target='#whats-on-carousel' data-bs-slide-to='0' class='active'
+                    aria-current='true' aria-label='Slide 1'></button>
+                <button type='button' data-bs-target='#whats-on-carousel' data-bs-slide-to='1'
+                    aria-label='Slide 2'></button>
+                <button type='button' data-bs-target='#whats-on-carousel' data-bs-slide-to='2'
+                    aria-label='Slide 3'></button>
+            </div>
+            <div class='carousel-inner'>
+                <div class='carousel-item active'>
+                    <a href='#'><img src='static/images/applefest.jpeg' class='d-block img-fluid w-100'
+                            alt='Apple Music Festival'></a>
+                </div>
+                <div class='carousel-item'>
+                    <a href='#'><img src='static/images/live.jpg' class='d-block img-fluid w-100'
+                            alt='Paramore Live in Concert'></a>
+                </div>
+                <div class='carousel-item'>
+                    <a href='#'><img src='static/images/flume.jpg' class='d-block img-fluid w-100'
+                            alt='Flume Australian Tour'></a>
+                </div>
+            </div>
+            <button class='carousel-control-prev' type='button' data-bs-target='#whats-on-carousel'
+                data-bs-slide='prev'>
+                <span class='carousel-control-prev-icon' aria-hidden='true'></span>
+                <span class='visually-hidden'>Previous</span>
+            </button>
+            <button class='carousel-control-next' type='button' data-bs-target='#whats-on-carousel'
+                data-bs-slide='next'>
+                <span class='carousel-control-next-icon' aria-hidden='true'></span>
+                <span class='visually-hidden'>Next</span>
+            </button>
+        </div>
+    </div>
+    <br>
+    <div class='row'>
+        <h1 class='display-5 fw-bold'>Featured Events</h1>
+    </div>
+    <div class='row'>
+        {% for event in events_list %}
+        <div class='col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch'>
+            <div class='card mt-4'>
+                <img src='{{event.image}}' class='card-img-top' alt=''>
+                <div class='card-body'>
+                    <h5 class='card-title'><a href='/events/{{event.id}}'>{{event.title}}</a></h5>
+                    {% if event.tickets_remaining == 0 %}
+                    <h6 class='card-subtitle mb-2' style="color:red">{{event.event_status.name.title()}}</h6>
+                    {% else %}
+                    <h6 class='card-subtitle mb-2 text-muted'>{{event.event_status.name.title()}}</h6>
+                    {% endif %}
+                    <p id='index-cards' class='card-text'>{{event.description}}</p>
+                    <a href='/events/{{event.id}}' class='btn btn-outline-dark'>See more</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <br>
+    <div class='row'>
+        <h1 class='display-5 fw-bold'>Browse by Genre</h1>
+    </div>
+    <div class='row'>
+        {% for genre in genres %}
+        <div class='col-6 col-xl-4'>
+            <a href='/events/view_all/{{genre.name.lower()}}'>
+                <img id='genre-images' class='img-fluid shadow-lg bg-white rounded-circle'
+                    src='static/images/{{genre.name|lower}}.png'>
+                <div class="d-flex justify-content-center">
+                    <p>{{genre.name.title()}}</p>
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<br>
+<div class='row'>
+    <h1 class='display-5 fw-bold'>Browse by City</h1>
+</div>
+<div class='row'>
+    {% for city in cities %}
+    <div class='col-6 col-xl-4'>
+        <a href='/events/view_all/city/{{city.name.lower()}}'>
+            <img id='genre-images' class='img-fluid shadow-lg bg-white rounded-circle'
+                src='static/images/{{city.name|lower}}.jpg'>
+            <div class="d-flex justify-content-center">
+                <p>{{city.name.title()}}</p>
+        </a>
+    </div>
+</div>
+{% endfor %}
+</div>
+<!-- end container -->
+{% endblock %}
