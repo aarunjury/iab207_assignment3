@@ -2,7 +2,7 @@ from bookings.models import EventGenre, EventCity, EventStatus
 from flask_wtf import FlaskForm
 from wtforms.fields import TextAreaField, SubmitField, StringField, PasswordField, BooleanField, DateTimeField
 from wtforms.fields.core import SelectField
-from wtforms.fields.html5 import TelField, IntegerField, DateTimeLocalField
+from wtforms.fields.html5 import TelField, IntegerField
 from wtforms.validators import InputRequired, Length, Email, EqualTo
 from flask_wtf.file import FileRequired, FileField, FileAllowed
 
