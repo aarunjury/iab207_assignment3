@@ -79,7 +79,7 @@ class Event(db.Model):
     # relation to call event.comments and comment.event
     comments = db.relationship('Comment', backref='event')
     users = db.relationship('User', backref='event')
-    booking = db.relationship('Booking', backref='event')
+    booking = db.relationship('Booking', backref='event', viewonly=True)
     # FK
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
