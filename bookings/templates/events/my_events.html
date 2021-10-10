@@ -17,7 +17,7 @@
     <div class='row'>
         <div id='event-history-name' class='row border-bottom'>
             <div class='col-sm-12 col-md-9'>
-                <h2>{{loop.index}}. <a href='/events/{{booking.bookings.id}}'>{{booking.bookings.title}}</a></h2>
+                <h2>{{loop.index}}. <a href='{{url_for("events.show", id=booking.bookings.id)}}'>{{booking.bookings.title}}</a></h2>
                 <h3><strong>{{booking.bookings.date.strftime('%B %d, %Y @ %I:%M
                         %p')}}</strong></h3>
                 <h3>{{booking.bookings.venue}}</h3>
