@@ -10,6 +10,7 @@ from flask_login import current_user
 
 eventbp = Blueprint('events', __name__, url_prefix='/events')
 
+
 @eventbp.route('/<id>')
 def show(id):
     event = Event.query.filter_by(id=id).first()
@@ -27,42 +28,46 @@ def show(id):
     cities = EventCity
     return render_template('events/event_details.html', cities=cities, event=event, form=comments_form, booking_form=form, username=name, events_list=events, genres=genres)
 
+
 @eventbp.route('/view_all')
 def view_all_events():
     if current_user.name == 'Guest':
-      name = 'Guest'
+        name = 'Guest'
     else:
-      name = current_user.name
+        name = current_user.name
     events_list_all = Event.query.all()
-    genres=EventGenre
+    genres = EventGenre
     cities = EventCity
     return render_template('events/view_events.html', cities=cities, username=name, heading='All Events', events=events_list_all, genres=genres, events_list=events_list_all)
+
 
 @eventbp.route('/view_all/<genre>')
 def view_events(genre):
     genre = genre.upper()
     genre_events_list = Event.query.filter_by(event_genre=genre).all()
     if current_user.name == 'Guest':
-      name = 'Guest'
+        name = 'Guest'
     else:
-      name = current_user.name
+        name = current_user.name
     events_list_all = Event.query.all()
-    genres=EventGenre
+    genres = EventGenre
     cities = EventCity
     return render_template('events/view_events.html', cities=cities, username=name, heading=genre, events=genre_events_list, genres=genres, events_list=events_list_all)
+
 
 @eventbp.route('/view_all/city/<city_name>')
 def view_events_city(city_name):
     city_name = city_name.upper()
     city_events = Event.query.filter_by(event_city=city_name).all()
     if current_user.name == 'Guest':
-      name = 'Guest'
+        name = 'Guest'
     else:
-      name = current_user.name
+        name = current_user.name
     events_list_all = Event.query.all()
-    genres=EventGenre
+    genres = EventGenre
     cities = EventCity
     return render_template('events/view_events.html', cities=cities, username=name, heading=city_name, events=city_events, genres=genres, events_list=events_list_all)
+
 
 @eventbp.route('/create', methods=['GET', 'POST'])
 @login_required
@@ -73,7 +78,7 @@ def create():
         # call the function that checks and returns image
         db_file_path = check_upload_file(form)
         event = Event(title=form.title.data, date=form.date.data, headliner=form.headliner.data, venue=form.venue.data, description=form.desc.data,
-                      image=db_file_path, total_tickets=form.total_tickets.data, tickets_remaining=form.total_tickets.data, event_status=EventStatus(
+                      image=db_file_path, total_tickets=form.total_tickets.data, tickets_remaining=form.total_tickets.data, price=form.price.data, event_status=EventStatus(
                           1).name,
                       event_genre=form.event_genre.data.upper(), event_city=form.event_city.data.upper(), user_id=current_user.id)
         # add the object to the db session
@@ -91,6 +96,7 @@ def create():
     cities = EventCity
     return render_template('events/create_event.html', cities=cities, event_form=form, username=current_user.name, events_list=events_list, genres=genres)
 
+
 @eventbp.route('/<id>/update', methods=['GET', 'POST'])
 @login_required
 def update_event(id):
@@ -105,17 +111,19 @@ def update_event(id):
     if form.validate_on_submit():
         # call the function that checks and returns image
         db_file_path = check_upload_file(form)
-        event.title=form.title.data
-        event.date=form.date.data
-        event.headliner=form.headliner.data
-        event.venue=form.venue.data
-        event.description=form.desc.data
-        event.image=db_file_path
-        event.total_tickets=form.total_tickets.data
-        event.tickets_remaining=form.total_tickets.data#minus sum of tickets_booked where event_id in bookings=event.id
-        event.event_status=form.event_status.data.upper()
-        event.event_genre=form.event_genre.data.upper()
-        event.event_city=form.event_city.data.upper()
+        event.title = form.title.data
+        event.date = form.date.data
+        event.headliner = form.headliner.data
+        event.venue = form.venue.data
+        # event.price = form.price.data
+        event.description = form.desc.data
+        event.image = db_file_path
+        event.total_tickets = form.total_tickets.data
+        # minus sum of tickets_booked where event_id in bookings=event.id
+        event.tickets_remaining = form.total_tickets.data
+        event.event_status = form.event_status.data.upper()
+        event.event_genre = form.event_genre.data.upper()
+        event.event_city = form.event_city.data.upper()
         # # commit to the database
         db.session.commit()
         flash('Successfully updated event!')
@@ -128,12 +136,14 @@ def update_event(id):
     cities = EventCity
     return render_template('events/edit_event.html', cities=cities, event_form=form, event=event, username=current_user.name, events_list=events_list, genres=genres)
 
+
 @eventbp.route('/<id>/delete', methods=['GET', 'POST'])
 @login_required
 def delete_event(id):
     Event.query.filter_by(id=id).delete()
     db.session.commit()
     return redirect(url_for('main.my_events'))
+
 
 @eventbp.route('/<id>/comment', methods=['GET', 'POST'])
 @login_required
@@ -155,27 +165,34 @@ def comment(id):
     # using redirect sends a GET request to destination.show
     return redirect(url_for('events.show', id=id))
 
+
 @eventbp.route('/<id>/book', methods=['GET', 'POST'])
 @login_required
 def book_event(id):
-  form = BookingForm()
-  event_obj = Event.query.filter_by(id=id).first()
-  if form.validate_on_submit():
-    if event_obj.tickets_remaining - form.tickets_required.data < 0:
-        flash("You can't book that many tickets!")
-        return redirect(url_for('events.show', id=id))
-    else:
-        if event_obj.tickets_remaining - form.tickets_required.data == 0:
-            event_obj.event_status = EventStatus.BOOKED
-        new_booking = Booking(tickets_booked=form.tickets_required.data, user_id=current_user.id, event_id=id)
-        Event.query.filter_by(id=id).\
-            update({'tickets_remaining': event_obj.tickets_remaining-form.tickets_required.data}, synchronize_session='evaluate')
-        db.session.add(new_booking)
-        db.session.commit()
-        flash('Your booking was successfully created!')
-        print('Your booking was successfully created!')
-        return redirect(url_for('events.show', id=id))
-        
+    form = BookingForm()
+    event_obj = Event.query.filter_by(id=id).first()
+    if form.validate_on_submit():
+        if form.tickets_required.data == 0:
+            flash("You must book at least one ticket!")
+            return redirect(url_for('events.show', id=id))
+        if event_obj.tickets_remaining - form.tickets_required.data < 0:
+            flash("You can't book that many tickets!")
+            return redirect(url_for('events.show', id=id))
+        else:
+            if event_obj.tickets_remaining - form.tickets_required.data == 0:
+                event_obj.event_status = EventStatus.BOOKED
+            new_booking = Booking(
+                tickets_booked=form.tickets_required.data, user_id=current_user.id, event_id=id)
+            Event.query.filter_by(id=id).update(
+                {'tickets_remaining': event_obj.tickets_remaining-form.tickets_required.data, 'tickets_booked': event_obj.tickets_booked+form.tickets_required.data}, synchronize_session='evaluate')
+            db.session.add(new_booking)
+            db.session.commit()
+            flash_string = "Your booking was successfully created! You've been charged ${0}. Your booking reference is: {1}".format((event_obj.price)*(new_booking.tickets_booked),new_booking.id)
+            flash(flash_string)
+            print('Your booking was successfully created!')
+            return redirect(url_for('events.show', id=id))
+
+
 def check_upload_file(form):
     # get file data from form
     fp = form.image.data
@@ -192,5 +209,3 @@ def check_upload_file(form):
     # save the file and return the db upload path
     fp.save(upload_path)
     return db_upload_path
-
-

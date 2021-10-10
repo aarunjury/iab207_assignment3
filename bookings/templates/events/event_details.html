@@ -21,7 +21,7 @@
                         %p')}} - <strong>{{event.event_status.name.title()}}</strong></h2>
                     <h3>{{event.venue}}, {{event.event_city.name.title()}}</h3>
                     <h6><strong>Event ID: </strong>{{event.id}}<strong> Created On:
-                        </strong>{{event.created_on.strftime('%d/%m/%Y')}}</h6>
+                        </strong>{{event.created_on.strftime('%d/%m/%Y')}} <strong>Price: </strong>${{event.price}}</h6>
                     {% if event.tickets_remaining == 0 %} <strong>
                         <p style="color:red">Sorry, sold out!
                         </p>
@@ -67,6 +67,8 @@
                                         <p>{{event.venue}}</p>
                                         <strong>Event Status:</strong>
                                         <p>{{event.event_status.name.title()}}</p>
+                                        <strong>Cost per ticket:</strong>
+                                        <p>${{event.price}}</p>
                                         {{wtf.quick_form(booking_form, "/events/{0}/book".format(event.id))}}
                                     </div>
                                 </div>
