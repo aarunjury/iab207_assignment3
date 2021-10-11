@@ -102,6 +102,7 @@ def create():
 def update_event(id):
     form = EditEventForm()
     event_old = Event.query.get(id)
+    event = Event.query.get(id)
     form.title.description=event_old.title
     form.date.description=event_old.date.strftime('%d/%m/%Y %H:%M')
     form.headliner.description=event_old.headliner
@@ -110,18 +111,21 @@ def update_event(id):
     form.total_tickets.description=event_old.total_tickets
     form.price.description=event_old.price
     if form.validate_on_submit():
+        tickets_booked = 0
         # call the function that checks and returns image
         db_file_path = check_upload_file(form)
-        event = Event.query.filter_by(id=id).first()
         event.title = form.title.data
         event.date = form.date.data
         event.headliner = form.headliner.data
         event.venue = form.venue.data
         event.description = form.desc.data
         event.image = db_file_path
-        event.total_tickets = form.total_tickets.data
+        event.total_tickets = int(form.total_tickets.data)
         # minus sum of tickets_booked where event_id in bookings=event.id
-        event.tickets_remaining = form.total_tickets.data
+        for booking in Booking.query.filter_by(event_id=id):
+            tickets_booked += booking.tickets_booked
+        #This next line does not prevent negative remaining tickets
+        event.tickets_remaining = event.total_tickets - tickets_booked
         event.price = form.price.data
         event.event_status = form.event_status.data.upper()
         event.event_genre = form.event_genre.data.upper()
@@ -133,11 +137,11 @@ def update_event(id):
         return redirect(url_for('main.my_events'))
     else:
         print('something wrong')
-        flash('Something went wrong')
+        #flash('Something went wrong')
     events_list = Event.query.all()
     genres = EventGenre
     cities = EventCity
-    return render_template('events/edit_event.html', cities=cities, event_form=form, event=event_old, username=current_user.name, events_list=events_list, genres=genres)
+    return render_template('events/edit_event.html', cities=cities, event_form=form, event=event, username=current_user.name, events_list=events_list, genres=genres)
 
 
 @eventbp.route('/<id>/delete', methods=['GET', 'POST'])
