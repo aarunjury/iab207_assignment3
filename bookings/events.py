@@ -1,3 +1,4 @@
+from datetime import datetime
 from bookings.views import my_events
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login.utils import login_required
@@ -80,7 +81,7 @@ def create():
         event = Event(title=form.title.data, date=form.date.data, headliner=form.headliner.data, venue=form.venue.data, description=form.desc.data,
                       image=db_file_path, total_tickets=form.total_tickets.data, tickets_remaining=form.total_tickets.data, price=form.price.data, event_status=EventStatus(
                           1).name,
-                      event_genre=form.event_genre.data.upper(), event_city=form.event_city.data.upper(), user_id=current_user.id)
+                      event_genre=form.event_genre.data.upper(), event_city=form.event_city.data.upper(), created_on=datetime.now(), user_id=current_user.id)
         # add the object to the db session
         db.session.add(event)
         # commit to the database
@@ -99,6 +100,8 @@ def create():
 
 @eventbp.route('/<id>/update', methods=['GET', 'POST'])
 @login_required
+#Should first pull a list of the logged in user's events and check that they
+#created the event before letting them edit it (due to url-jacking).
 def update_event(id):
     form = EditEventForm()
     event_old = Event.query.get(id)
