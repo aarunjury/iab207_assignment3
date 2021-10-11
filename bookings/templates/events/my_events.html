@@ -17,12 +17,15 @@
     <div class='row'>
         <div id='event-history-name' class='row border-bottom'>
             <div class='col-sm-12 col-md-9'>
-                <h2>{{loop.index}}. <a href='{{url_for("events.show", id=booking.bookings.id)}}'>{{booking.bookings.title}}</a></h2>
+                <h2>{{loop.index}}. <a
+                        href='{{url_for("events.show", id=booking.bookings.id)}}'>{{booking.bookings.title}}</a></h2>
                 <h3><strong>{{booking.bookings.date.strftime('%B %d, %Y @ %I:%M
                         %p')}}</strong></h3>
                 <h3>{{booking.bookings.venue}}</h3>
-                <h6><strong>Booking ID: </strong>{{booking.id}} <strong>Booked On: </strong>{{booking.booked_on.strftime('%d/%m/%Y @ %I:%M %p')}}</h6>
-                <h6><strong>Tickets Booked: </strong>{{booking.tickets_booked}} <strong>Total Cost: </strong>${{booking.tickets_booked*booking.event.price}}</h6>
+                <h6><strong>Booking ID: </strong>{{booking.id}} <strong>Booked On:
+                    </strong>{{booking.booked_on.strftime('%d/%m/%Y @ %I:%M %p')}}</h6>
+                <h6><strong>Tickets Booked: </strong>{{booking.tickets_booked}} <strong>Total Cost:
+                    </strong>${{booking.tickets_booked*booking.event.price}}</h6>
             </div>
             <div class='col-sm-12 col-md-3'>
                 <img src='{{booking.bookings.image}}' class='img-fluid img-thumbnail rounded'>
@@ -62,8 +65,6 @@
                     <div class='col-md-6 col-xl-3'>
                         <a href='{{url_for("events.update_event", id=event.id)}}' class='btn btn-outline-dark'
                             id='edit-button' type='button' class='btn btn-dark'>Edit Event</a>
-                    </div>
-                    <div class='col-md-6 col-xl-3'>
                         <button id='delete-button' type='button' class='btn btn-dark' data-bs-toggle='modal'
                             data-bs-target='#deleteEventModal'>
                             Delete Event

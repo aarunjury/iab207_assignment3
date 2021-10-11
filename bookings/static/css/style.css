@@ -60,10 +60,11 @@ main {
 }
 .img-thumbnail {
   display: block;
-  min-height:200px;
+  min-height: 200px;
   object-fit: cover;
   width: auto;
   height: auto;
+  float: right;
 }
 
 #search-button {
@@ -81,10 +82,13 @@ main {
 
 #delete-button {
   float: left;
+  margin-bottom: 0.25rem;
+  margin-left: 0.25rem;
 }
 
 #edit-button {
   float: left;
+  margin-left: 0.25rem;
 }
 
 #genre-images {
@@ -102,7 +106,6 @@ body {
 }
 
 h1 {
-
   font-weight: 900;
   border-left: 10px solid #96858f;
   padding-left: 10px;
