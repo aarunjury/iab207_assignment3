@@ -50,14 +50,14 @@
             <div class='card mt-4'>
                 <img src='{{event.image}}' class='card-img-top' alt=''>
                 <div class='card-body'>
-                    <h5 class='card-title'><a href='/events/{{event.id}}'>{{event.title}}</a></h5>
+                    <h5 class='card-title'><a href='{{url_for("events.show", id=event.id)}}'>{{event.title}}</a></h5>
                     {% if event.tickets_remaining == 0 %}
                     <h6 class='card-subtitle mb-2' style="color:red">{{event.event_status.name.title()}}</h6>
                     {% else %}
                     <h6 class='card-subtitle mb-2 text-muted'>{{event.event_status.name.title()}}</h6>
                     {% endif %}
                     <p id='index-cards' class='card-text'>{{event.description}}</p>
-                    <a href='/events/{{event.id}}' class='btn btn-outline-dark'>See more</a>
+                    <a href='{{url_for("events.show", id=event.id)}}' class='btn btn-outline-dark'>See more</a>
                 </div>
             </div>
         </div>
@@ -70,7 +70,7 @@
     <div class='row'>
         {% for genre in genres %}
         <div class='col-6 col-xl-4'>
-            <a href='/events/view_all/{{genre.name.lower()}}'>
+            <a href='{{url_for("events.view_events", genre=genre.name.lower())}}'>
                 <img id='genre-images' class='img-fluid shadow-lg bg-white rounded-circle'
                     src='static/images/{{genre.name|lower}}.png'>
                 <div class="d-flex justify-content-center">
@@ -87,7 +87,7 @@
 <div class='row'>
     {% for city in cities %}
     <div class='col-6 col-xl-4'>
-        <a href='/events/view_all/city/{{city.name.lower()}}'>
+        <a href='{{url_for("events.view_events_city", city_name=city.name.lower())}}'>
             <img id='genre-images' class='img-fluid shadow-lg bg-white rounded-circle'
                 src='static/images/{{city.name|lower}}.jpg'>
             <div class="d-flex justify-content-center">

@@ -19,11 +19,11 @@
             <div class='col-sm-12 col-md-9'>
                 <h2>{{loop.index}}. <a
                         href='{{url_for("events.show", id=booking.bookings.id)}}'>{{booking.bookings.title}}</a></h2>
-                <h3><strong>{{booking.bookings.date.strftime('%B %d, %Y @ %I:%M
+                <h3><strong>{{booking.bookings.date.strftime('%B %d, %Y @ %#I:%M
                         %p')}}</strong></h3>
                 <h3>{{booking.bookings.venue}}</h3>
                 <h6><strong>Booking ID: </strong>{{booking.id}} <strong>Booked On:
-                    </strong>{{booking.booked_on.strftime('%d/%m/%Y @ %I:%M %p')}}</h6>
+                    </strong>{{booking.booked_on.strftime('%d/%m/%Y @ %#I:%M %p')}}</h6>
                 <h6><strong>Tickets Booked: </strong>{{booking.tickets_booked}} <strong>Total Cost:
                     </strong>{{"$%.2f"|format(booking.tickets_booked*booking.event.price)}}</h6>
             </div>
@@ -56,10 +56,10 @@
         <div id='event-history-name' class='row border-bottom'>
             <div class='col-sm-12 col-md-9'>
                 <h2>{{loop.index}}. <a href='{{url_for("events.show", id=event.id)}}'>{{event.title}}</a></h2>
-                <h3><strong>{{event.date.strftime('%B %d, %Y @ %I:%M
+                <h3><strong>{{event.date.strftime('%B %d, %Y @ %#I:%M
                         %p')}}</strong></h3>
                 <h3>{{event.venue}}, {{event.event_city.name.title()}}</h3>
-                <h4><strong>Event ID: </strong>{{event.id}}</h4>
+                <h4><strong>Event ID: </strong>{{event.id}} <strong>Tickets Sold: </strong>{{event.tickets_booked}}</h4>
                 <h4><strong>Created On: </strong>{{event.created_on.strftime('%d/%m/%Y')}}</h4>
                 <div class='row'>
                     <div class='col-md-6 col-xl-3'>
