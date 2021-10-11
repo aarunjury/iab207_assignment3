@@ -46,6 +46,7 @@ def search():
         events += Event.query.filter(Event.title.like(event)).all()
         events += Event.query.filter(Event.event_city.like(event)).all()
         events += Event.query.filter(Event.event_genre.like(event)).all()
+        events = list(set(events))
         all_events = Event.query.all()
         genres = EventGenre
         cities = EventCity

@@ -88,6 +88,12 @@ class Event(db.Model):
         str.format(self.title, self.date)
         return str
 
+    def __eq__(self, other):
+        return self.id==other.id
+    
+    def __hash__(self):
+        return hash(('id', self.id))
+
 
 class Comment(db.Model):
     __tablename__ = 'comments'
