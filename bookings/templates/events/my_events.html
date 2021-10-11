@@ -25,7 +25,7 @@
                 <h6><strong>Booking ID: </strong>{{booking.id}} <strong>Booked On:
                     </strong>{{booking.booked_on.strftime('%d/%m/%Y @ %I:%M %p')}}</h6>
                 <h6><strong>Tickets Booked: </strong>{{booking.tickets_booked}} <strong>Total Cost:
-                    </strong>${{booking.tickets_booked*booking.event.price}}</h6>
+                    </strong>{{"$%.2f"|format(booking.tickets_booked*booking.event.price)}}</h6>
             </div>
             <div class='col-sm-12 col-md-3'>
                 <img src='{{booking.bookings.image}}' class='img-fluid img-thumbnail rounded'>

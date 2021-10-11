@@ -194,7 +194,7 @@ def book_event(id):
                 {'tickets_remaining': event_obj.tickets_remaining-form.tickets_required.data, 'tickets_booked': event_obj.tickets_booked+form.tickets_required.data}, synchronize_session='evaluate')
             db.session.add(new_booking)
             db.session.commit()
-            flash_string = "Your booking was successfully created! You've been charged ${0}. Your booking reference is: {1}".format((event_obj.price)*(new_booking.tickets_booked),new_booking.id)
+            flash_string = "Your booking was successfully created! You've been charged ${:,.2f}. Your booking reference is: {}".format((event_obj.price)*(new_booking.tickets_booked),new_booking.id)
             flash(flash_string)
             print('Your booking was successfully created!')
             return redirect(url_for('events.show', id=id))
