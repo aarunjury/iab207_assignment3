@@ -11,13 +11,12 @@ ALLOWED_FILE = {'PNG', 'JPG', 'JPEG', 'jpeg', 'png', 'jpg'}
 
 
 class EventForm(FlaskForm):
-    genres = EventGenre
     title = StringField('Event Title', validators=[
                         InputRequired(message='Your event must have a title'), Length(max=40)])
     date = DateTimeField('Date and Time', format='%d/%m/%Y %H:%M', validators=[
                          InputRequired(message='Must be in the format: dd/mm/yyyy HH:MM')])
     headliner = StringField('Headlining Artist', validators=[
-                        InputRequired(message='Your event must have a headlining artist')])
+        InputRequired(message='Your event must have a headlining artist')])
     venue = StringField('Venue', validators=[
                         InputRequired(message='Your event must have a venue')])
     desc = TextAreaField('Event Description', validators=[
@@ -37,17 +36,16 @@ class EventForm(FlaskForm):
 
 
 class EditEventForm(FlaskForm):
-    genres = EventGenre
     title = StringField('Event Title', validators=[Length(max=40)])
     date = DateTimeField('Date and Time', format='%d/%m/%Y %H:%M')
     headliner = StringField('Headlining Artist')
     venue = StringField('Venue')
     desc = TextAreaField('Event Description', validators=[Length(max=700)])
-    image = FileField('Event Image', validators=[FileRequired(
-        message='Image cannot be empty'), FileAllowed(ALLOWED_FILE, message='Only supports png,jpg,JPG,PNG')])
+    image = FileField('Event Image', validators=[FileAllowed(
+        ALLOWED_FILE, message='Only supports png,jpg,JPG,PNG')])
     total_tickets = StringField(
         'Total Number of Tickets')
-    price = FloatField('Cost per ticket:', validators=[InputRequired(message='You must choose a price per ticket.'), NumberRange(
+    price = FloatField('Cost per ticket:', validators=[NumberRange(
         min=0.01, max=999.99, message='Must include dollars and cents')])
     event_status = SelectField('Choose a status:', choices=[
                                e.name.title() for e in EventStatus])
@@ -59,7 +57,8 @@ class EditEventForm(FlaskForm):
 
 
 class CommentForm(FlaskForm):
-    text = TextAreaField('Leave a Comment:', validators=[InputRequired()])
+    text = TextAreaField('Leave a Comment:', validators=[
+                         InputRequired(message="Your comment can't be blank")])
     submit = SubmitField('Submit')
 
 

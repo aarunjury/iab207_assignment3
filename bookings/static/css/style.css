@@ -55,18 +55,15 @@ main {
   background-color: #6d7993;
 }
 
-/* .navbar-brand {
-    color: #96858F !important;
-}
-
-.nav-link{
-    color: #000000 !important;
-} */
 .border-bottom {
   border-bottom: 1px solid #000000 !important;
 }
 .img-thumbnail {
-  max-height: 200px;
+  display: block;
+  min-height:200px;
+  object-fit: cover;
+  width: auto;
+  height: auto;
 }
 
 #search-button {

@@ -49,7 +49,7 @@ class User(UserMixin, db.Model):
     address = db.Column(db.String(500), nullable=False)
     # relation to call user.comments and comment.created_by
     comments = db.relationship('Comment', backref='user')
-    created_events = db.relationship('Event', backref='user')
+    created_events = db.relationship('Event', backref='user', viewonly=True)
     created_bookings = db.relationship('Booking', backref='user')
 
     def __repr__(self):
