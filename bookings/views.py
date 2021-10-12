@@ -6,7 +6,6 @@ mainbp = Blueprint('main', __name__)
 
 @mainbp.route('/')
 def index():
-    #check location using IP then Event.query(location)
     if current_user.name == 'Guest':
         name = 'Guest'
     else:

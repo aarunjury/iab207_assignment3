@@ -8,6 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # create a blueprint
 authbp = Blueprint('auth', __name__)
 
+
 @authbp.route('/login', methods=['GET', 'POST'])
 def login():
     loginForm = LoginForm()
@@ -36,16 +37,18 @@ def login():
     cities = EventCity
     return render_template('user.html', form=loginForm,  heading='Login', username=name, genres=genres, cities=cities, events_list=all_events)
 
+
 @authbp.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
-    
+
     address = []
     if form.validate_on_submit():
         # if this returns a user, then the email already exists in database
         user = User.query.filter_by(emailid=form.email_id.data).first()
         if user:  # if a user is found, we want to redirect back to signup page so user can try again
-            flash('Email address already exists. Login using that email or try using a different email.')
+            flash(
+                'Email address already exists. Login using that email or try using a different email.')
             return redirect(url_for('auth.register'))
         address.append(str(form.street_no.data))
         address.append(form.street_name.data)
@@ -66,6 +69,7 @@ def register():
     genres = EventGenre
     cities = EventCity
     return render_template('user.html', form=form, heading='Register', username=name, genres=genres, cities=cities, events_list=all_events)
+
 
 @authbp.route("/logout")
 @login_required

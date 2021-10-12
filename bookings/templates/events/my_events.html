@@ -59,8 +59,8 @@
                 <h3><strong>{{event.date.strftime('%B %d, %Y @ %#I:%M
                         %p')}}</strong></h3>
                 <h3>{{event.venue}}, {{event.event_city.name.title()}}</h3>
-                <h4><strong>Event ID: </strong>{{event.id}} <strong>Tickets Sold: </strong>{{event.tickets_booked}}</h4>
-                <h4><strong>Created On: </strong>{{event.created_on.strftime('%d/%m/%Y')}}</h4>
+                <h6><strong>Event ID: </strong>{{event.id}}<strong> Created On: </strong>{{event.created_on.strftime('%d/%m/%Y')}}</h6>
+                <h6><strong>Tickets Sold: </strong>{{event.tickets_booked}}</h6>
                 <div class='row'>
                     <div class='col-md-6 col-xl-3'>
                         <a href='{{url_for("events.update_event", id=event.id)}}' class='btn btn-outline-dark'

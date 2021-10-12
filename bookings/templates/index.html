@@ -16,15 +16,15 @@
             </div>
             <div class='carousel-inner'>
                 <div class='carousel-item active'>
-                    <a href='#'><img src='static/images/applefest.jpeg' class='d-block img-fluid w-100'
+                    <a href='#'><img src='{{url_for("static", filename="images/applefest.jpeg")}}' class='d-block img-fluid w-100'
                             alt='Apple Music Festival'></a>
                 </div>
                 <div class='carousel-item'>
-                    <a href='#'><img src='static/images/live.jpg' class='d-block img-fluid w-100'
+                    <a href='#'><img src='{{url_for("static", filename="images/live.jpg")}}' class='d-block img-fluid w-100'
                             alt='Paramore Live in Concert'></a>
                 </div>
                 <div class='carousel-item'>
-                    <a href='#'><img src='static/images/flume.jpg' class='d-block img-fluid w-100'
+                    <a href='#'><img src='{{url_for("static", filename="images/flume.jpg")}}' class='d-block img-fluid w-100'
                             alt='Flume Australian Tour'></a>
                 </div>
             </div>
@@ -48,7 +48,8 @@
         {% for event in events_list %}
         <div class='col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch'>
             <div class='card mt-4'>
-                <img src='{{event.image}}' class='card-img-top' alt=''>
+                <!-- <img src="{{url_for('static', filename='{0}'.format(event.image))}}" class='card-img-top' alt=''> -->
+                <img src="{{event.image}}" class='card-img-top' alt=''>
                 <div class='card-body'>
                     <h5 class='card-title'><a href='{{url_for("events.show", id=event.id)}}'>{{event.title}}</a></h5>
                     {% if event.tickets_remaining == 0 %}
@@ -72,7 +73,7 @@
         <div class='col-6 col-xl-4'>
             <a href='{{url_for("events.view_events", genre=genre.name.lower())}}'>
                 <img id='genre-images' class='img-fluid shadow-lg bg-white rounded-circle'
-                    src='static/images/{{genre.name|lower}}.png'>
+                    src="{{url_for('static', filename='images/{0}.png'.format(genre.name|lower))}}">
                 <div class="d-flex justify-content-center">
                     <p>{{genre.name.title()}}</p>
             </a>
@@ -89,7 +90,7 @@
     <div class='col-6 col-xl-4'>
         <a href='{{url_for("events.view_events_city", city_name=city.name.lower())}}'>
             <img id='genre-images' class='img-fluid shadow-lg bg-white rounded-circle'
-                src='static/images/{{city.name|lower}}.jpg'>
+                src='{{url_for("static", filename="images/{0}.jpg".format(city.name|lower))}}'>
             <div class="d-flex justify-content-center">
                 <p>{{city.name.title()}}</p>
         </a>

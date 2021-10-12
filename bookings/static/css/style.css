@@ -3,8 +3,19 @@ body {
   font-family: "Quicksand", sans-serif;
 }
 
+body {
+  background-image: url("/static/images/bkgnd.png");
+}
+
 main {
   padding-bottom: 40px;
+}
+
+h1 {
+  font-weight: 900;
+  border-left: 10px solid #96858f;
+  padding-left: 10px;
+  margin-bottom: 30px;
 }
 
 .card {
@@ -17,6 +28,10 @@ main {
   object-fit: cover;
 }
 
+.card-body{
+  background-color: #FFFAFA;
+}
+
 #index-cards {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -26,10 +41,18 @@ main {
   white-space: normal;
 }
 
+.figure-caption{
+  color:#000000;
+}
+
+.dropdown-menu-dark .dropdown-item{
+  color: #FFFAFA;
+}
+
 .btn {
   background-color: #6d7993;
-  border-color: #6d7993;
-  color: #ffffff;
+  border-color: #000000;
+  color: #FFFAFA;
   border: 1px, solid;
   margin-top: 0.5rem;
   background-color: #96858f;
@@ -44,20 +67,19 @@ main {
   display: block;
 }
 
-.navbar .navbar-dark .nav-item.active .nav-link,
-.navbar .navbar-dark .nav-item .nav-link:active,
-.navbar .navbar-dark .nav-item .nav-link:focus,
-.navbar .navbar-dark .nav-item:hover .nav-link {
-  color: #ffffff !important;
-}
-
 .navbar {
   background-color: #6d7993;
+  color: #000000;
+}
+
+.nav-link{
+  color: #FFFAFA !important;
 }
 
 .border-bottom {
   border-bottom: 1px solid #000000 !important;
 }
+
 .img-thumbnail {
   display: block;
   min-height: 200px;
@@ -67,9 +89,31 @@ main {
   float: right;
 }
 
+.dropdown-menu {
+  background-color: #96858f;
+}
+
+.form-group {
+  margin: auto;
+  padding: 10px;
+}
+
+.img-thumbnail {
+  border-color: #9099a2;
+}
+
+.navbar-brand{
+  color:#FFFAFA !important;
+}
+
 #search-button {
-  background-color: #6d7993;
+  border: 1px solid black;
   margin: 0.25rem;
+}
+
+#hurry{
+  margin: auto;
+  width: 50%;
 }
 
 #page-container {
@@ -98,30 +142,12 @@ main {
   max-height: 200px;
 }
 
-/* new shit here */
-
-body {
-  background-color: #d5d5d5;
-  background-image: url("/static/images/bkgnd.png");
+#SearchForm {
+  max-width: 100%;
 }
 
-h1 {
-  font-weight: 900;
-  border-left: 10px solid #96858f;
-  padding-left: 10px;
-  margin-bottom: 30px;
-}
-
-.dropdown-menu {
-  background-color: #96858f;
-}
-
-.form-control {
-  max-width: 50%;
-}
-
-#text {
-  max-width: 50%;
+#submit {
+  margin-left: 0.75rem;
 }
 
 #image {
@@ -129,10 +155,4 @@ h1 {
   border-radius: 4px;
 }
 
-.img-thumbnail {
-  border-color: #9099a2;
-}
 
-#SearchForm {
-  max-width: 100%;
-}

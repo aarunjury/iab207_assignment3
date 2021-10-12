@@ -1,5 +1,4 @@
 from datetime import datetime
-from bookings.views import my_events
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login.utils import login_required
 from .models import Event, Comment, EventCity, EventGenre, EventStatus, Booking
@@ -100,23 +99,25 @@ def create():
 
 @eventbp.route('/<id>/update', methods=['GET', 'POST'])
 @login_required
-#Should first pull a list of the logged in user's events and check that they
-#created the event before letting them edit it (due to url-jacking).
+# Should first pull a list of the logged in user's events and check that they
+# created the event before letting them edit it (due to url-jacking).
 def update_event(id):
     form = EditEventForm()
     event_old = Event.query.get(id)
     event = Event.query.get(id)
-    form.title.description=event_old.title
-    form.date.description=event_old.date.strftime('%d/%m/%Y %H:%M')
-    form.headliner.description=event_old.headliner
-    form.venue.description=event_old.venue
-    form.desc.description=event_old.description
-    form.total_tickets.description=event_old.total_tickets
-    form.price.description=event_old.price
+    form.title.description = event_old.title
+    form.date.description = event_old.date.strftime('%d/%m/%Y %H:%M')
+    form.headliner.description = event_old.headliner
+    form.venue.description = event_old.venue
+    form.desc.description = event_old.description
+    form.total_tickets.description = event_old.total_tickets
+    form.price.description = event_old.price
     if form.validate_on_submit():
         tickets_booked = 0
         # call the function that checks and returns image
         db_file_path = check_upload_file(form)
+        # Event.query.filter_by(id=id).update(
+        #         {'tickets_remaining': event.tickets_remaining-form.tickets_required.data, 'tickets_booked': event.tickets_booked+form.tickets_required.data}, synchronize_session='evaluate')
         event.title = form.title.data
         event.date = form.date.data
         event.headliner = form.headliner.data
@@ -127,7 +128,7 @@ def update_event(id):
         # minus sum of tickets_booked where event_id in bookings=event.id
         for booking in Booking.query.filter_by(event_id=id):
             tickets_booked += booking.tickets_booked
-        #This next line does not prevent negative remaining tickets
+        # This next line does not prevent negative remaining tickets
         event.tickets_remaining = event.total_tickets - tickets_booked
         event.price = form.price.data
         event.event_status = form.event_status.data.upper()
@@ -150,7 +151,11 @@ def update_event(id):
 @eventbp.route('/<id>/delete', methods=['GET', 'POST'])
 @login_required
 def delete_event(id):
+    # Delete the event from the database
     Event.query.filter_by(id=id).delete()
+    # Delete any associated bookings
+    # (should also delete the comments to save disk space)
+    Booking.query.filter_by(event_id=id).delete()
     db.session.commit()
     return redirect(url_for('main.my_events'))
 
@@ -159,12 +164,12 @@ def delete_event(id):
 @login_required
 def comment(id):
     form = CommentForm()
-    # get the destination object associated to the page and the comment
-    event_obj = Event.query.filter_by(id=id).first()
+    # get the Event object associated to the page and the comment
+    event = Event.query.filter_by(id=id).first()
     if form.validate_on_submit():
-        # read the comment from the form
+        # Create the Comment object using the form data
         comment = Comment(text=form.text.data,
-                          event=event_obj, user_id=current_user.id)
+                          event=event, created_at=datetime.now(), user_id=current_user.id)
         # here the back-referencing works - comment.destination is set
         # and the link is created
         db.session.add(comment)
@@ -180,24 +185,25 @@ def comment(id):
 @login_required
 def book_event(id):
     form = BookingForm()
-    event_obj = Event.query.filter_by(id=id).first()
+    event = Event.query.filter_by(id=id).first()
     if form.validate_on_submit():
         if form.tickets_required.data == 0:
             flash("You must book at least one ticket!")
             return redirect(url_for('events.show', id=id))
-        if event_obj.tickets_remaining - form.tickets_required.data < 0:
-            flash("You can't book that many tickets!")
+        if event.tickets_remaining - form.tickets_required.data < 0:
+            flash("Your order cannot be placed at it exceeds the number of tickets remaining. Reduce the quantity and try again.")
             return redirect(url_for('events.show', id=id))
         else:
-            if event_obj.tickets_remaining - form.tickets_required.data == 0:
-                event_obj.event_status = EventStatus.BOOKED
+            if event.tickets_remaining - form.tickets_required.data == 0:
+                event.event_status = EventStatus.BOOKED
             new_booking = Booking(
-                tickets_booked=form.tickets_required.data, user_id=current_user.id, event_id=id)
+                tickets_booked=form.tickets_required.data, booked_on=datetime.now(), user_id=current_user.id, event_id=id)
             Event.query.filter_by(id=id).update(
-                {'tickets_remaining': event_obj.tickets_remaining-form.tickets_required.data, 'tickets_booked': event_obj.tickets_booked+form.tickets_required.data}, synchronize_session='evaluate')
+                {'tickets_remaining': event.tickets_remaining-form.tickets_required.data, 'tickets_booked': event.tickets_booked+form.tickets_required.data}, synchronize_session='evaluate')
             db.session.add(new_booking)
             db.session.commit()
-            flash_string = "Your booking was successfully created! You've been charged ${:,.2f}. Your booking reference is: {}".format((event_obj.price)*(new_booking.tickets_booked),new_booking.id)
+            flash_string = "Your booking was successfully created! You've been charged ${:,.2f}. Your booking reference is: {}".format(
+                (event.price)*(new_booking.tickets_booked), new_booking.id)
             flash(flash_string)
             print('Your booking was successfully created!')
             return redirect(url_for('events.show', id=id))

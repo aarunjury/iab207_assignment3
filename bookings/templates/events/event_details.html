@@ -20,60 +20,65 @@
                     <h2>{{event.date.strftime('%B %d, %Y @ %#I:%M
                         %p')}} - <strong>{{event.event_status.name.title()}}</strong></h2>
                     <h3>{{event.venue}}, {{event.event_city.name.title()}}</h3>
-                    <h6><strong>Event ID: </strong>{{event.id}}<strong> Created On:
-                        </strong>{{event.created_on.strftime('%d/%m/%Y')}} <strong>Price: </strong>{{"$%.2f"|format(event.price)}}</h6>
-                    {% if event.tickets_remaining == 0 %} <strong>
-                        <p style="color:red">Sorry, sold out!
-                        </p>
-                    </strong>
-                    <button id='book-button' type='button' class='btn btn-dark' data-bs-toggle='modal'
-                        data-bs-target='#bookingModal' disabled>
-                        Book Tickets
-                    </button>
-                    {% else %}
-                    <button id='book-button' type='button' class='btn btn-dark' data-bs-toggle='modal'
-                        data-bs-target='#bookingModal'>
-                        Book Tickets
-                    </button>
-                    {% endif %}
-                    {% if event.tickets_remaining <= 100 and event.tickets_remaining> 0 %} <p style="color:red">Hurry,
-                            only
-                            {{event.tickets_remaining}} tickets left!
-                        </p>
-                        </strong>
+                    <h6><strong>Genre: </strong>{{event.event_genre.name.title()}}
+                        <strong>Created On: </strong>{{event.created_on.strftime('%d/%m/%Y')}}
+                    </h6>
+                    <div class='row'>
+                        {% if event.tickets_remaining == 0 %}
+                        <div class='col-6'>
+                            <p style="color:red"><strong>Sorry, sold out!</strong></p>
+                        </div>
+                        {% else %}
+                        <div class='col-6'>
+                            <h2><strong>{{"$%.2f"|format(event.price)}}</strong> ea.</h2>
+                        </div>
+                        <div class='col-6'>
+                            <button id='book-button' type='button' class='btn btn-dark' data-bs-toggle='modal'
+                                data-bs-target='#bookingModal'>
+                                Book Tickets</button>
+                        </div>
                         {% endif %}
-                        <!-- Modal -->
-                        <div class='modal fade' id='bookingModal' tabindex='-1' aria-labelledby='bookingModalLabel'
-                            aria-hidden='true'>
-                            <div class='modal-dialog'>
-                                <div class='modal-content'>
-                                    <div class='modal-header'>
-                                        <h5 class='modal-title' id='bookingModalLabel'>{{event.title}}</h5>
-                                        <button type='button' class='btn-close' data-bs-dismiss='modal'
-                                            aria-label='Close'></button>
-                                    </div>
-                                    <div class='modal-body'>
-                                        <strong>Important Info:</strong>
-                                        <p><strong>{{event.venue}}</strong> Bag Restrictions: Please note backpacks
-                                            of
-                                            any type and size
-                                            are not permitted into <strong>{{event.venue}}</strong>, including
-                                            handbags
-                                            that can be worn
-                                            as a backpack. All other bags must be smaller than A5.</p>
-                                        <strong>Date:</strong>
-                                        <p>{{event.date}}</p>
-                                        <strong>Venue:</strong>
-                                        <p>{{event.venue}}</p>
-                                        <strong>Event Status:</strong>
-                                        <p>{{event.event_status.name.title()}}</p>
-                                        <strong>Cost per ticket:</strong>
-                                        <p>{{"$%.2f"|format(event.price)}}</p>
-                                        {{wtf.quick_form(booking_form, "/events/{0}/book".format(event.id))}}
-                                    </div>
+                        {% if event.tickets_remaining <= 100 and event.tickets_remaining> 0 %}
+                            <div class='row' id='hurry'>
+                                <p style="color:red"><strong>Hurry, only {{event.tickets_remaining}} tickets
+                                left!</strong></p>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Modal -->
+                    <div class='modal fade' id='bookingModal' tabindex='-1' aria-labelledby='bookingModalLabel'
+                        aria-hidden='true'>
+                        <div class='modal-dialog'>
+                            <div class='modal-content'>
+                                <div class='modal-header'>
+                                    <h5 class='modal-title' id='bookingModalLabel'>{{event.title}}</h5>
+                                    <button type='button' class='btn-close' data-bs-dismiss='modal'
+                                        aria-label='Close'></button>
+                                </div>
+                                <div class='modal-body'>
+                                    <strong>Important Info:</strong>
+                                    <p><strong>{{event.venue}}</strong> Bag Restrictions: Please note backpacks
+                                        of
+                                        any type and size
+                                        are not permitted into <strong>{{event.venue}}</strong>, including
+                                        handbags
+                                        that can be worn
+                                        as a backpack. All other bags must be smaller than A5.</p>
+                                    <strong>Date:</strong>
+                                    <p>{{event.date.strftime('%B %d, %Y @ %#I:%M
+                                        %p')}}</p>
+                                    <strong>Venue:</strong>
+                                    <p>{{event.venue}}</p>
+                                    <strong>Event Status:</strong>
+                                    <p>{{event.event_status.name.title()}}</p>
+                                    <strong>Cost per ticket:</strong>
+                                    <p>{{"$%.2f"|format(event.price)}}</p>
+                                    {{wtf.quick_form(booking_form, "/events/{0}/book".format(event.id))}}
                                 </div>
                             </div>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -90,6 +95,12 @@
         </div>
     </div>
     <div class='row'>
+        <div class="col">
+            {{wtf.quick_form(form,"/events/{0}/comment".format(event.id))}}
+        </div>
+    </div>
+    <br>
+    <div class='row'>
         <div class='col'>
             {% for comment in event.comments %}
             <div class="row border-bottom">
@@ -98,9 +109,7 @@
                 <p>{{comment.text}}</p>
             </div>
             {% endfor %}
-            <div class="col">
-                {{wtf.quick_form(form,"/events/{0}/comment".format(event.id))}}
-            </div>
         </div>
-    </div><!-- end container -->
-    {% endblock %}
+    </div>
+</div><!-- end container -->
+{% endblock %}
