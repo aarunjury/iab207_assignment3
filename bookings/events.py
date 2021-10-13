@@ -11,6 +11,13 @@ from flask_login import current_user
 eventbp = Blueprint('events', __name__, url_prefix='/events')
 
 
+def is_current_user():
+    if current_user.name == 'Guest':
+        name = 'Guest'
+    else:
+        name = current_user.name
+    return name
+
 @eventbp.route('/<id>')
 def show(id):
     event = Event.query.filter_by(id=id).first()
@@ -19,22 +26,17 @@ def show(id):
     form = BookingForm()
     if form.validate_on_submit():
         return redirect(url_for('main.index'))
-    if current_user.name == 'Guest':
-        name = 'Guest'
-    else:
-        name = current_user.name
+    name = is_current_user()
     events = Event.query.all()
+    artist_events = Event.query.filter_by(headliner=event.headliner).all()  
     genres = EventGenre
     cities = EventCity
-    return render_template('events/event_details.html', cities=cities, event=event, form=comments_form, booking_form=form, username=name, events_list=events, genres=genres)
+    return render_template('events/event_details.html', event=event, form=comments_form, booking_form=form, username=name, events_list=events, artist_events=artist_events, genres=genres, cities=cities)
 
 
 @eventbp.route('/view_all')
 def view_all_events():
-    if current_user.name == 'Guest':
-        name = 'Guest'
-    else:
-        name = current_user.name
+    name = is_current_user()
     events_list_all = Event.query.all()
     genres = EventGenre
     cities = EventCity
@@ -45,10 +47,7 @@ def view_all_events():
 def view_events(genre):
     genre = genre.upper()
     genre_events_list = Event.query.filter_by(event_genre=genre).all()
-    if current_user.name == 'Guest':
-        name = 'Guest'
-    else:
-        name = current_user.name
+    name = is_current_user()
     events_list_all = Event.query.all()
     genres = EventGenre
     cities = EventCity
@@ -59,10 +58,7 @@ def view_events(genre):
 def view_events_city(city_name):
     city_name = city_name.upper()
     city_events = Event.query.filter_by(event_city=city_name).all()
-    if current_user.name == 'Guest':
-        name = 'Guest'
-    else:
-        name = current_user.name
+    name = is_current_user()
     events_list_all = Event.query.all()
     genres = EventGenre
     cities = EventCity
@@ -180,20 +176,21 @@ def comment(id):
     # using redirect sends a GET request to destination.show
     return redirect(url_for('events.show', id=id))
 
+def check_tickets(form, event):
+    if form.tickets_required.data == 0:
+        flash("You must book at least one ticket!")
+    else:
+        if event.tickets_remaining - form.tickets_required.data < 0:
+            flash("Your order cannot be placed at it exceeds the number of tickets remaining. Reduce the quantity and try again.")
+    return True
 
 @eventbp.route('/<id>/book', methods=['GET', 'POST'])
 @login_required
 def book_event(id):
     form = BookingForm()
     event = Event.query.filter_by(id=id).first()
-    if form.validate_on_submit():
-        if form.tickets_required.data == 0:
-            flash("You must book at least one ticket!")
-            return redirect(url_for('events.show', id=id))
-        if event.tickets_remaining - form.tickets_required.data < 0:
-            flash("Your order cannot be placed at it exceeds the number of tickets remaining. Reduce the quantity and try again.")
-            return redirect(url_for('events.show', id=id))
-        else:
+    if check_tickets(form, event, id) == True:
+        if form.validate_on_submit():
             if event.tickets_remaining - form.tickets_required.data == 0:
                 event.event_status = EventStatus.BOOKED
             new_booking = Booking(
@@ -207,6 +204,7 @@ def book_event(id):
             flash(flash_string)
             print('Your booking was successfully created!')
             return redirect(url_for('events.show', id=id))
+    return redirect(url_for('events.show', id=id))
 
 
 def check_upload_file(form):
