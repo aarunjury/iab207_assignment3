@@ -8,6 +8,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 # create a blueprint
 authbp = Blueprint('auth', __name__)
 
+def is_current_user():
+    if current_user.name == 'Guest':
+        name = 'Guest'
+    else:
+        name = current_user.name
+    return name
 
 @authbp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -28,10 +34,7 @@ def login():
             print('Successfully logged in')
             flash('You logged in successfully')
             return redirect(url_for('main.index'))
-    if current_user.name == 'Guest':
-        name = 'Guest'
-    else:
-        name = current_user.name
+    name = is_current_user()
     all_events = Event.query.all()
     genres = EventGenre
     cities = EventCity
@@ -61,10 +64,7 @@ def register():
         db.session.commit()
         flash('Successfully created new user! Please login to continue.')
         return redirect(url_for('auth.login'))
-    if current_user.name == 'Guest':
-        name = 'Guest'
-    else:
-        name = current_user.name
+    name = is_current_user()
     all_events = Event.query.all()
     genres = EventGenre
     cities = EventCity

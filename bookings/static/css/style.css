@@ -142,6 +142,10 @@ h1 {
   max-height: 200px;
 }
 
+#hero-image{
+  max-height: 100vh;
+}
+
 #SearchForm {
   max-width: 100%;
 }
