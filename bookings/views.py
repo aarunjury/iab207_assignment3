@@ -16,10 +16,12 @@ def is_current_user():
 @mainbp.route('/')
 def index():
     name = is_current_user()
+    # Gets a list of Events without duplicate artists (to populate the Artist navbar dropdown)
+    dropdown_events = Event.query.group_by(Event.headliner)
     all_events = Event.query.all()
     genres = EventGenre
     cities = EventCity
-    return render_template('index.html', cities=cities, events_list=all_events, username=name, genres=genres)
+    return render_template('index.html', username=name, artist_list=dropdown_events, events_list=all_events,  genres=genres, cities=cities)
 
 
 @mainbp.route('/my_bookings')
@@ -33,18 +35,20 @@ def my_bookings():
     for booking in bookings:
         booked_events += Event.query.filter_by(id=booking.id).all()
     all_events = Event.query.all()
+    dropdown_events = Event.query.group_by(Event.headliner)
     genres = EventGenre
     cities = EventCity
-    return render_template('events/my_events.html', heading='My Bookings', cities=cities, username=current_user.name, bookings=bookings, events=booked_events, events_list=all_events, genres=genres)
+    return render_template('events/my_events.html', heading='My Bookings', cities=cities, username=current_user.name, artist_list=dropdown_events, bookings=bookings, events=booked_events, events_list=all_events, genres=genres)
 
 
 @mainbp.route('/my_events')
 @login_required
 def my_events():
     all_events = Event.query.all()
+    dropdown_events = Event.query.group_by(Event.headliner)
     genres = EventGenre
     cities = EventCity
-    return render_template('events/my_events.html', heading='My Events', cities=cities, username=current_user.name, events=current_user.created_events, events_list=all_events, genres=genres)
+    return render_template('events/my_events.html', heading='My Events', cities=cities, username=current_user.name, artist_list=dropdown_events, events=current_user.created_events, events_list=all_events, genres=genres)
 
 
 @mainbp.route('/search')
@@ -58,11 +62,12 @@ def search():
         events += Event.query.filter(Event.title.like(event)).all()
         events += Event.query.filter(Event.event_city.like(event)).all()
         events += Event.query.filter(Event.event_genre.like(event)).all()
-        #Filter out duplicates
+        # Filter out duplicates
         events = list(set(events))
         all_events = Event.query.all()
+        dropdown_events = Event.query.group_by(Event.headliner)
         genres = EventGenre
         cities = EventCity
-        return render_template('events/view_events.html', cities=cities, username=name, heading='Search Results', events=events, genres=genres, events_list=all_events)
+        return render_template('events/view_events.html', cities=cities, artist_list=dropdown_events, username=name, heading='Search Results', events=events, genres=genres, events_list=all_events)
     else:
         return redirect(url_for('main.index'))
