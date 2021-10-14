@@ -5,9 +5,9 @@ from . import db
 from flask_login import login_required, logout_user, login_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
-# create a blueprint
 authbp = Blueprint('auth', __name__)
 
+#Checks if the current user is Anonymous or logged in
 def is_current_user():
     if current_user.name == 'Guest':
         name = 'Guest'
@@ -34,6 +34,7 @@ def login():
             print('Successfully logged in')
             flash('You logged in successfully')
             return redirect(url_for('main.index'))
+    # General objects reqd. for loading page
     name = is_current_user()
     all_events = Event.query.all()
     dropdown_events = Event.query.group_by(Event.headliner)
@@ -65,6 +66,7 @@ def register():
         db.session.commit()
         flash('Successfully created new user! Please login to continue.')
         return redirect(url_for('auth.login'))
+    # General objects reqd. for loading page
     name = is_current_user()
     all_events = Event.query.all()
     dropdown_events = Event.query.group_by(Event.headliner)

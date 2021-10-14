@@ -7,7 +7,7 @@ from werkzeug.exceptions import HTTPException
 
 db = SQLAlchemy()
 UPLOAD_FOLDER = '/static/images/'  # not working
-SQLALCHEMY_TRACK_MODIFICATIONS = false
+SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 def create_app():

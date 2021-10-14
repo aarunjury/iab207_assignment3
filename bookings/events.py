@@ -10,7 +10,7 @@ from flask_login import current_user
 
 eventbp = Blueprint('events', __name__, url_prefix='/events')
 
-
+# Checks if the current user is Anonymous or logged in
 def is_current_user():
     if current_user.name == 'Guest':
         name = 'Guest'
@@ -27,9 +27,10 @@ def show(id):
     booking_form = BookingForm()
     if booking_form.validate_on_submit():
         return redirect(url_for('main.index'))
+    artist_events = Event.query.filter_by(headliner=event.headliner).all()
+    # Objects reqd. for page loading
     name = is_current_user()
     events = Event.query.all()
-    artist_events = Event.query.filter_by(headliner=event.headliner).all()
     dropdown_events = Event.query.group_by(Event.headliner)
     genres = EventGenre
     cities = EventCity
@@ -50,6 +51,7 @@ def view_all_events():
 def view_events(genre):
     genre = genre.upper()
     genre_events_list = Event.query.filter_by(event_genre=genre).all()
+    # Objects reqd. for page loading
     name = is_current_user()
     events_list_all = Event.query.all()
     dropdown_events = Event.query.group_by(Event.headliner)
@@ -62,6 +64,7 @@ def view_events(genre):
 def view_events_city(city_name):
     city_name = city_name.upper()
     city_events = Event.query.filter_by(event_city=city_name).all()
+    # Objects reqd. for page loading
     name = is_current_user()
     events_list_all = Event.query.all()
     dropdown_events = Event.query.group_by(Event.headliner)
@@ -92,6 +95,8 @@ def create():
         return redirect(url_for('main.my_events'))
     else:
         print('something wrong')
+        flash('Sorry, something went wrong!')
+    # Objects reqd. for page loading
     events_list = Event.query.all()
     dropdown_events = Event.query.group_by(Event.headliner)
     genres = EventGenre
@@ -105,50 +110,49 @@ def create():
 # created the event before letting them edit it (due to url-jacking).
 def update_event(id):
     form = EditEventForm()
-    event_old = Event.query.get(id)
     event = Event.query.get(id)
-    form.title.description = event_old.title
-    form.date.description = event_old.date.strftime('%d/%m/%Y %H:%M')
-    form.headliner.description = event_old.headliner
-    form.venue.description = event_old.venue
-    form.desc.description = event_old.description
-    form.total_tickets.description = event_old.total_tickets
-    form.price.description = event_old.price
+    # First check the current user is editing
+    # an event they created and not someone else's
+    if current_user.id != event.user_id:
+        flash("You can only edit your own events!")
+        return redirect(url_for('main.my_events'))
+    # Provide the old event information as a reminder to the user
+    form.title.description = event.title
+    form.date.description = event.date.strftime('%d/%m/%Y %H:%M')
+    form.headliner.description = event.headliner
+    form.venue.description = event.venue
+    form.desc.description = event.description
+    form.total_tickets.description = event.total_tickets
+    form.price.description = event.price
     if form.validate_on_submit():
         tickets_booked = 0
         # call the function that checks and returns image
         db_file_path = check_upload_file(form)
-        # Event.query.filter_by(id=id).update(
-        #         {'tickets_remaining': event.tickets_remaining-form.tickets_required.data, 'tickets_booked': event.tickets_booked+form.tickets_required.data}, synchronize_session='evaluate')
-        event.title = form.title.data
-        event.date = form.date.data
-        event.headliner = form.headliner.data
-        event.venue = form.venue.data
-        event.description = form.desc.data
-        event.image = db_file_path
-        event.total_tickets = int(form.total_tickets.data)
-        # minus sum of tickets_booked where event_id in bookings=event.id
+        # Find the number of tickets already booked for this event
         for booking in Booking.query.filter_by(event_id=id):
             tickets_booked += booking.tickets_booked
-        # This next line does not prevent negative remaining tickets
-        event.tickets_remaining = event.total_tickets - tickets_booked
-        event.price = form.price.data
-        event.event_status = form.event_status.data.upper()
-        event.event_genre = form.event_genre.data.upper()
-        event.event_city = form.event_city.data.upper()
+        # Find the Event object in the DB to be edited and update its values
+        Event.query.filter_by(id=id).update(
+            {'title': form.title.data, 'date': form.date.data, 'headliner': form.headliner.data,
+             'venue': form.venue.data, 'description': form.desc.data, 'image': db_file_path,
+             'total_tickets': form.total_tickets.data,
+             'tickets_remaining': form.total_tickets.data-tickets_booked,
+             'tickets_booked': tickets_booked, 'price': form.price.data,
+             'event_status': form.event_status.data.upper(), 'event_genre': form.event_genre.data.upper(),
+             'event_city': form.event_city.data.upper()}, synchronize_session='evaluate')
         # # commit to the database
         db.session.commit()
         flash('Successfully updated event!')
         # Always end with redirect when form is valid
         return redirect(url_for('main.my_events'))
     else:
-        print('something wrong')
-        #flash('Something went wrong')
+        flash('Something went wrong! '+str(form.errors))
+    # Objects reqd. for page loading
     events_list = Event.query.all()
     dropdown_events = Event.query.group_by(Event.headliner)
     genres = EventGenre
     cities = EventCity
-    return render_template('events/edit_event.html', cities=cities, event_form=form,artist_list=dropdown_events,  event=event, username=current_user.name, events_list=events_list, genres=genres)
+    return render_template('events/edit_event.html', cities=cities, event_form=form, artist_list=dropdown_events,  event=event, username=current_user.name, events_list=events_list, genres=genres)
 
 
 @eventbp.route('/<id>/delete', methods=['GET', 'POST'])
@@ -183,6 +187,8 @@ def comment(id):
     # using redirect sends a GET request to destination.show
     return redirect(url_for('events.show', id=id))
 
+# Function to check if a booking should be allowed to execute
+
 
 def check_tickets(form, event):
     if form.tickets_required.data == 0:
@@ -190,7 +196,7 @@ def check_tickets(form, event):
         return False
     else:
         if event.tickets_remaining - form.tickets_required.data < 0:
-            flash("Your order cannot be placed at it exceeds the number of tickets remaining. Reduce the quantity and try again.")
+            flash("Your order cannot be placed as it exceeds the number of tickets remaining. Reduce the quantity and try again.")
             return False
     return True
 
@@ -200,12 +206,16 @@ def check_tickets(form, event):
 def book_event(id):
     form = BookingForm()
     event = Event.query.filter_by(id=id).first()
+    # check to see if the booking should be allowed to go ahead
     if check_tickets(form, event) == True:
         if form.validate_on_submit():
+            # If this booking exhausts the remaining tickets, set it to Booked Out
             if event.tickets_remaining - form.tickets_required.data == 0:
                 event.event_status = EventStatus.BOOKED
+            # Create the new booking object
             new_booking = Booking(
                 tickets_booked=form.tickets_required.data, booked_on=datetime.now(), user_id=current_user.id, event_id=id)
+            # Find the event this booking is for and update its remaining tickets
             Event.query.filter_by(id=id).update(
                 {'tickets_remaining': event.tickets_remaining-form.tickets_required.data, 'tickets_booked': event.tickets_booked+form.tickets_required.data}, synchronize_session='evaluate')
             db.session.add(new_booking)

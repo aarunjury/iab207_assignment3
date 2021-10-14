@@ -1,4 +1,3 @@
-from sqlalchemy.sql.sqltypes import Float
 from bookings.models import EventGenre, EventCity, EventStatus
 from flask_wtf import FlaskForm
 from wtforms.fields import TextAreaField, SubmitField, StringField, PasswordField, BooleanField, DateTimeField
@@ -24,7 +23,7 @@ class EventForm(FlaskForm):
     image = FileField('Event Image', validators=[
         FileRequired(message='Image cannot be empty'),
         FileAllowed(ALLOWED_FILE, message='Only supports png,jpg,JPG,PNG')])
-    total_tickets = StringField(
+    total_tickets = IntegerField(
         'Total Number of Tickets', validators=[InputRequired(message='You must select how many tickets are available for purchase.')])
     price = FloatField('Cost per ticket: $', validators=[InputRequired(message='You must choose a price per ticket.'), NumberRange(
         min=0.01, max=999.99, message='Must include dollars and cents')])
@@ -43,7 +42,7 @@ class EditEventForm(FlaskForm):
     desc = TextAreaField('Event Description', validators=[Length(max=700)])
     image = FileField('Event Image', validators=[FileRequired(message='Image cannot be empty'), FileAllowed(
         ALLOWED_FILE, message='Only supports png,jpg,JPG,PNG')])
-    total_tickets = StringField(
+    total_tickets = IntegerField(
         'Total Number of Tickets')
     price = FloatField('Cost per ticket:', validators=[NumberRange(
         min=0.01, max=999.99, message='Must include dollars and cents')])

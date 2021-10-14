@@ -34,6 +34,7 @@ def my_bookings():
     # Add the booked events to the list
     for booking in bookings:
         booked_events += Event.query.filter_by(id=booking.id).all()
+    # General objects reqd. for loading page
     all_events = Event.query.all()
     dropdown_events = Event.query.group_by(Event.headliner)
     genres = EventGenre
@@ -45,6 +46,7 @@ def my_bookings():
 @login_required
 def my_events():
     all_events = Event.query.all()
+    # General objects reqd. for loading page
     dropdown_events = Event.query.group_by(Event.headliner)
     genres = EventGenre
     cities = EventCity
@@ -64,6 +66,7 @@ def search():
         events += Event.query.filter(Event.event_genre.like(event)).all()
         # Filter out duplicates
         events = list(set(events))
+        # General objects reqd. for loading page
         all_events = Event.query.all()
         dropdown_events = Event.query.group_by(Event.headliner)
         genres = EventGenre
