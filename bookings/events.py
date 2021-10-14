@@ -187,9 +187,11 @@ def comment(id):
 def check_tickets(form, event):
     if form.tickets_required.data == 0:
         flash("You must book at least one ticket!")
+        return False
     else:
         if event.tickets_remaining - form.tickets_required.data < 0:
             flash("Your order cannot be placed at it exceeds the number of tickets remaining. Reduce the quantity and try again.")
+            return False
     return True
 
 
@@ -198,7 +200,7 @@ def check_tickets(form, event):
 def book_event(id):
     form = BookingForm()
     event = Event.query.filter_by(id=id).first()
-    if check_tickets(form, event, id) == True:
+    if check_tickets(form, event) == True:
         if form.validate_on_submit():
             if event.tickets_remaining - form.tickets_required.data == 0:
                 event.event_status = EventStatus.BOOKED
