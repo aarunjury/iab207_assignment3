@@ -18,29 +18,32 @@ def is_current_user():
         name = current_user.name
     return name
 
+
 @eventbp.route('/<id>')
 def show(id):
     event = Event.query.filter_by(id=id).first()
     # create the comment form
     comments_form = CommentForm()
-    form = BookingForm()
-    if form.validate_on_submit():
+    booking_form = BookingForm()
+    if booking_form.validate_on_submit():
         return redirect(url_for('main.index'))
     name = is_current_user()
     events = Event.query.all()
-    artist_events = Event.query.filter_by(headliner=event.headliner).all()  
+    artist_events = Event.query.filter_by(headliner=event.headliner).all()
+    dropdown_events = Event.query.group_by(Event.headliner)
     genres = EventGenre
     cities = EventCity
-    return render_template('events/event_details.html', event=event, form=comments_form, booking_form=form, username=name, events_list=events, artist_events=artist_events, genres=genres, cities=cities)
+    return render_template('events/event_details.html', event=event, artist_list=dropdown_events, form=comments_form, booking_form=booking_form, username=name, events_list=events, artist_events=artist_events, genres=genres, cities=cities)
 
 
 @eventbp.route('/view_all')
 def view_all_events():
     name = is_current_user()
     events_list_all = Event.query.all()
+    dropdown_events = Event.query.group_by(Event.headliner)
     genres = EventGenre
     cities = EventCity
-    return render_template('events/view_events.html', cities=cities, username=name, heading='All Events', events=events_list_all, genres=genres, events_list=events_list_all)
+    return render_template('events/view_events.html', cities=cities, artist_list=dropdown_events, username=name, heading='All Events', events=events_list_all, genres=genres, events_list=events_list_all)
 
 
 @eventbp.route('/view_all/<genre>')
@@ -49,9 +52,10 @@ def view_events(genre):
     genre_events_list = Event.query.filter_by(event_genre=genre).all()
     name = is_current_user()
     events_list_all = Event.query.all()
+    dropdown_events = Event.query.group_by(Event.headliner)
     genres = EventGenre
     cities = EventCity
-    return render_template('events/view_events.html', cities=cities, username=name, heading=genre, events=genre_events_list, genres=genres, events_list=events_list_all)
+    return render_template('events/view_events.html', cities=cities, artist_list=dropdown_events, username=name, heading=genre, events=genre_events_list, genres=genres, events_list=events_list_all)
 
 
 @eventbp.route('/view_all/city/<city_name>')
@@ -60,9 +64,10 @@ def view_events_city(city_name):
     city_events = Event.query.filter_by(event_city=city_name).all()
     name = is_current_user()
     events_list_all = Event.query.all()
+    dropdown_events = Event.query.group_by(Event.headliner)
     genres = EventGenre
     cities = EventCity
-    return render_template('events/view_events.html', cities=cities, username=name, heading=city_name, events=city_events, genres=genres, events_list=events_list_all)
+    return render_template('events/view_events.html', cities=cities, artist_list=dropdown_events, username=name, heading=city_name, events=city_events, genres=genres, events_list=events_list_all)
 
 
 @eventbp.route('/create', methods=['GET', 'POST'])
@@ -88,9 +93,10 @@ def create():
     else:
         print('something wrong')
     events_list = Event.query.all()
+    dropdown_events = Event.query.group_by(Event.headliner)
     genres = EventGenre
     cities = EventCity
-    return render_template('events/create_event.html', cities=cities, event_form=form, username=current_user.name, events_list=events_list, genres=genres)
+    return render_template('events/create_event.html', cities=cities, artist_list=dropdown_events, event_form=form, username=current_user.name, events_list=events_list, genres=genres)
 
 
 @eventbp.route('/<id>/update', methods=['GET', 'POST'])
@@ -139,9 +145,10 @@ def update_event(id):
         print('something wrong')
         #flash('Something went wrong')
     events_list = Event.query.all()
+    dropdown_events = Event.query.group_by(Event.headliner)
     genres = EventGenre
     cities = EventCity
-    return render_template('events/edit_event.html', cities=cities, event_form=form, event=event, username=current_user.name, events_list=events_list, genres=genres)
+    return render_template('events/edit_event.html', cities=cities, event_form=form,artist_list=dropdown_events,  event=event, username=current_user.name, events_list=events_list, genres=genres)
 
 
 @eventbp.route('/<id>/delete', methods=['GET', 'POST'])
@@ -176,6 +183,7 @@ def comment(id):
     # using redirect sends a GET request to destination.show
     return redirect(url_for('events.show', id=id))
 
+
 def check_tickets(form, event):
     if form.tickets_required.data == 0:
         flash("You must book at least one ticket!")
@@ -183,6 +191,7 @@ def check_tickets(form, event):
         if event.tickets_remaining - form.tickets_required.data < 0:
             flash("Your order cannot be placed at it exceeds the number of tickets remaining. Reduce the quantity and try again.")
     return True
+
 
 @eventbp.route('/<id>/book', methods=['GET', 'POST'])
 @login_required

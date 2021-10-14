@@ -79,9 +79,9 @@
                             </a>
                             <ul class='dropdown-menu dropdown-menu-dark' aria-labelledby='navbarDropdown'>
                                 <!-- will need to set a maximum number of times to loop, maybe loop in range of 10 instead? -->
-                                {% for event in events_list %}
+                                {% for artist in artist_list %}
                                 <li><a class='dropdown-item'
-                                        href='{{url_for("events.show", id=event.id)}}'>{{event.headliner}}</a></li>
+                                        href='{{url_for("events.show", id=artist.id)}}'>{{artist.headliner}}</a></li>
                                 <hr class='dropdown-divider'>
                                 {% endfor %}
                                 <li>

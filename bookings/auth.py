@@ -36,9 +36,10 @@ def login():
             return redirect(url_for('main.index'))
     name = is_current_user()
     all_events = Event.query.all()
+    dropdown_events = Event.query.group_by(Event.headliner)
     genres = EventGenre
     cities = EventCity
-    return render_template('user.html', form=loginForm,  heading='Login', username=name, genres=genres, cities=cities, events_list=all_events)
+    return render_template('user.html', form=loginForm, artist_list=dropdown_events, heading='Login', username=name, genres=genres, cities=cities, events_list=all_events)
 
 
 @authbp.route('/register', methods=['GET', 'POST'])
@@ -66,9 +67,10 @@ def register():
         return redirect(url_for('auth.login'))
     name = is_current_user()
     all_events = Event.query.all()
+    dropdown_events = Event.query.group_by(Event.headliner)
     genres = EventGenre
     cities = EventCity
-    return render_template('user.html', form=form, heading='Register', username=name, genres=genres, cities=cities, events_list=all_events)
+    return render_template('user.html', form=form, heading='Register', artist_list=dropdown_events, username=name, genres=genres, cities=cities, events_list=all_events)
 
 
 @authbp.route("/logout")

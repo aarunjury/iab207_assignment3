@@ -16,9 +16,6 @@ class EventStatus(Enum):
     BOOKED = 3
     INACTIVE = 4
 
-# this could be populated from whatever the current values in the database are (but risks
-# 'dirty' inputs from users...)
-
 
 class EventGenre(Enum):
     DANCE = 1
