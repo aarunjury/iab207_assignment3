@@ -6,19 +6,19 @@ from sqlalchemy.sql.expression import false
 from werkzeug.exceptions import HTTPException
 
 db = SQLAlchemy()
-UPLOAD_FOLDER = '/static/images/'  # not working
 SQLALCHEMY_TRACK_MODIFICATIONS = False
-
 
 def create_app():
     app = Flask(__name__)
     bootstrap = Bootstrap(app)
     app.secret_key = "1234567890"
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ticketsmarter.sqlite'
+    app.config['UPLOAD_FOLDER'] = 'static/images/'
     db.init_app(app)
     login_manager = LoginManager()
     from .models import User, Anonymous
     login_manager.anonymous_user = Anonymous
+    login_manager.login_message_category = "warning"
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
     from . import views, events, auth
@@ -47,17 +47,17 @@ def create_app():
         cities = EventCity
         return render_template('fourohfour.html', cities=cities, username=current_user.name, events=current_user.created_events, events_list=all_events, genres=genres), 500
 
-    # @app.errorhandler(Exception)
-    # def handle_exception(e):
-    #     from .models import Event, EventGenre, EventCity
-    #     all_events = Event.query.all()
-    #     genres = EventGenre
-    #     cities = EventCity
-    # # pass through HTTP errors
-    #     if isinstance(e, HTTPException):
-    #         return e
-    # # now you're handling non-HTTP exceptions only
-    #     print(e)
-    #     return render_template('fourohfour.html', cities=cities, username=current_user.name, events=current_user.created_events, events_list=all_events, genres=genres), 500
+        # @app.errorhandler(Exception)
+        # def handle_exception(e):
+        #     from .models import Event, EventGenre, EventCity
+        #     all_events = Event.query.all()
+        #     genres = EventGenre
+        #     cities = EventCity
+        # # pass through HTTP errors
+        #     if isinstance(e, HTTPException):
+        #         return e
+        # # now you're handling non-HTTP exceptions only
+        #     print(e)
+        #     return render_template('fourohfour.html', cities=cities, username=current_user.name, events=current_user.created_events, events_list=all_events, genres=genres), 500
 
     return app
