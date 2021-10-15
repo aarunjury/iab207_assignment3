@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
 from flask_login.utils import login_required
 from .models import Event, Comment, EventCity, EventGenre, EventStatus, Booking
 from .forms import EditEventForm, EventForm, CommentForm, BookingForm
@@ -93,9 +93,6 @@ def create():
         print('Successfully created new event')
         # Always end with redirect when form is valid
         return redirect(url_for('main.my_events'))
-    else:
-        print('something wrong')
-        flash('Sorry, something went wrong!')
     # Objects reqd. for page loading
     events_list = Event.query.all()
     dropdown_events = Event.query.group_by(Event.headliner)
@@ -106,47 +103,50 @@ def create():
 
 @eventbp.route('/<id>/update', methods=['GET', 'POST'])
 @login_required
-# Should first pull a list of the logged in user's events and check that they
-# created the event before letting them edit it (due to url-jacking).
 def update_event(id):
-    form = EditEventForm()
     event = Event.query.get(id)
+    # Provide the old event information in the form fields
+    # as a reminder to the user
+    form = EditEventForm(
+        title=event.title,
+        date=event.date,
+        headliner=event.headliner,
+        venue=event.venue,
+        desc=event.description,
+        total_tickets=event.total_tickets,
+        price=event.price,
+        event_status=event.event_status,
+        event_genre=event.event_genre.name.title(),
+        event_city=event.event_city.name.title())
     # First check the current user is editing
     # an event they created and not someone else's
     if current_user.id != event.user_id:
-        flash("You can only edit your own events!")
+        flash("You can only edit your own events!", 'danger')
         return redirect(url_for('main.my_events'))
-    # Provide the old event information as a reminder to the user
-    form.title.description = event.title
-    form.date.description = event.date.strftime('%d/%m/%Y %H:%M')
-    form.headliner.description = event.headliner
-    form.venue.description = event.venue
-    form.desc.description = event.description
-    form.total_tickets.description = event.total_tickets
-    form.price.description = event.price
     if form.validate_on_submit():
-        tickets_booked = 0
-        # call the function that checks and returns image
-        db_file_path = check_upload_file(form)
-        # Find the number of tickets already booked for this event
-        for booking in Booking.query.filter_by(event_id=id):
-            tickets_booked += booking.tickets_booked
+        # If a new image was supplied, update it (need to check since it is not mandatory on the EditEventForm)
+        if (form.image.data is not None):
+            # call the function that checks and returns image
+            db_file_path = check_upload_file(form)
+            Event.query.filter_by(id=id).update(
+                {'image': db_file_path}, synchronize_session='evaluate')
+        else:
+            Event.query.filter_by(id=id).update(
+                {'image': event.image}, synchronize_session='evaluate')
         # Find the Event object in the DB to be edited and update its values
         Event.query.filter_by(id=id).update(
             {'title': form.title.data, 'date': form.date.data, 'headliner': form.headliner.data,
-             'venue': form.venue.data, 'description': form.desc.data, 'image': db_file_path,
+             'venue': form.venue.data, 'description': form.desc.data,
              'total_tickets': form.total_tickets.data,
-             'tickets_remaining': form.total_tickets.data-tickets_booked,
-             'tickets_booked': tickets_booked, 'price': form.price.data,
+             'tickets_remaining': form.total_tickets.data-event.tickets_booked,
+             'price': form.price.data,
              'event_status': form.event_status.data.upper(), 'event_genre': form.event_genre.data.upper(),
              'event_city': form.event_city.data.upper()}, synchronize_session='evaluate')
-        # # commit to the database
+        # commit to the database
         db.session.commit()
-        flash('Successfully updated event!')
-        # Always end with redirect when form is valid
+        flash('Successfully updated event!', 'success')
+        # end with redirect when form is valid
         return redirect(url_for('main.my_events'))
-    else:
-        flash('Something went wrong! '+str(form.errors))
     # Objects reqd. for page loading
     events_list = Event.query.all()
     dropdown_events = Event.query.group_by(Event.headliner)
@@ -158,6 +158,12 @@ def update_event(id):
 @eventbp.route('/<id>/delete', methods=['GET', 'POST'])
 @login_required
 def delete_event(id):
+    event = Event.query.get(id)
+    # Make sure the current user is deleting their own
+    # event and not someone else's
+    if current_user.id != event.user_id:
+        flash("You can only edit your own events!", 'danger')
+        return redirect(url_for('main.my_events'))
     # Delete the event from the database
     Event.query.filter_by(id=id).delete()
     # Delete any associated bookings
@@ -171,18 +177,16 @@ def delete_event(id):
 @login_required
 def comment(id):
     form = CommentForm()
-    # get the Event object associated to the page and the comment
+    # get the Event object associated to the page
     event = Event.query.filter_by(id=id).first()
     if form.validate_on_submit():
         # Create the Comment object using the form data
         comment = Comment(text=form.text.data,
                           event=event, created_at=datetime.now(), user_id=current_user.id)
-        # here the back-referencing works - comment.destination is set
-        # and the link is created
         db.session.add(comment)
         db.session.commit()
         # flashing a message which needs to be handled by the html
-        flash('Your comment has been added')
+        flash('Your comment has been added', 'primary')
         print('Your comment has been added')
     # using redirect sends a GET request to destination.show
     return redirect(url_for('events.show', id=id))
@@ -191,12 +195,12 @@ def comment(id):
 
 
 def check_tickets(form, event):
-    if form.tickets_required.data == 0:
-        flash("You must book at least one ticket!")
+    if form.tickets_required.data <= 0:
+        flash("You must book at least one ticket!", 'warning')
         return False
     else:
         if event.tickets_remaining - form.tickets_required.data < 0:
-            flash("Your order cannot be placed as it exceeds the number of tickets remaining. Reduce the quantity and try again.")
+            flash("Your order cannot be placed as it exceeds the number of tickets remaining. Reduce the quantity and try again.", 'danger')
             return False
     return True
 
@@ -223,7 +227,7 @@ def book_event(id):
             flash_string = "Your booking was successfully created! You've been charged ${:,.2f}. Your booking reference is: {}".format(
                 (event.price)*(new_booking.tickets_booked), new_booking.id)
             flash(flash_string)
-            print('Your booking was successfully created!')
+            print('Your booking was successfully created!', 'success')
             return redirect(url_for('events.show', id=id))
     return redirect(url_for('events.show', id=id))
 
@@ -235,12 +239,11 @@ def check_upload_file(form):
     # get the current path of the module file… store image file relative to this path
     BASE_PATH = os.path.dirname(__file__)
     # upload file location – directory of this file/static/image
-    # upload_path=os.path.join(BASE_PATH,current_app.config['UPLOAD_FOLDER'],secure_filename(filename))
     upload_path = os.path.join(
-        BASE_PATH, 'static/images', secure_filename(filename))
+        BASE_PATH, current_app.config['UPLOAD_FOLDER'], secure_filename(filename))
     # store relative path in DB as image location in HTML is relative
-    # db_upload_path=current_app.config['UPLOAD_FOLDER'] + secure_filename(filename)
-    db_upload_path = '/static/images/' + secure_filename(filename)
+    db_upload_path = '/' + \
+        current_app.config['UPLOAD_FOLDER'] + secure_filename(filename)
     # save the file and return the db upload path
     fp.save(upload_path)
     return db_upload_path
