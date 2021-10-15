@@ -42,7 +42,7 @@ def create_app():
         from bookings.models import Event, EventCity, EventGenre, EventStatus
         all_events = Event.query.all()
         # On launch, check if there are any events that are now in the past
-        # and if so, change them to Inactive
+        # and if so, change them to Inactive (this changes it in session, doesn't write the new status to the db)
         for event in all_events:
             if event.date < datetime.now():
                 event.event_status=EventStatus.INACTIVE
