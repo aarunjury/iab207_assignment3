@@ -40,7 +40,7 @@ class EditEventForm(FlaskForm):
     headliner = StringField('Headlining Artist')
     venue = StringField('Venue')
     desc = TextAreaField('Event Description', validators=[Length(max=700)])
-    image = FileField('Event Image', validators=[FileRequired(message='Image cannot be empty'), FileAllowed(
+    image = FileField('Event Image', validators=[FileAllowed(
         ALLOWED_FILE, message='Only supports png,jpg,JPG,PNG')])
     total_tickets = IntegerField(
         'Total Number of Tickets')

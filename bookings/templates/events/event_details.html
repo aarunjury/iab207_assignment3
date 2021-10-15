@@ -111,8 +111,8 @@
     </div>
     <br>
 {% for comment in event.comments %}
-    <div class='row border-bottom'>
-        <div class='col-sm-12 col-md-3 col-lg-2'>
+    <div class='row'>
+        <div class='col-sm-12 col-md-3 col-lg-2 border-bottom'>
             <div class='row'>
                 <b>{{comment.user.name}}</b>
             </div>
@@ -121,7 +121,7 @@
                     %p')}}</span>
             </div>
         </div>
-        <div class='col-sm-12 col-md-9 col-lg-10 mt-auto'>
+        <div class='col-sm-12 col-md-9 col-lg-10 mt-auto border-bottom'>
             <div class='row'></div>
             <div class='row'>{{comment.text}}</div>
         </div>

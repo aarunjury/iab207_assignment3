@@ -4,7 +4,7 @@ from flask_login import login_required, current_user
 
 mainbp = Blueprint('main', __name__)
 
-
+# Checks if the current user is Anonymous or logged in
 def is_current_user():
     if current_user.name == 'Guest':
         name = 'Guest'
