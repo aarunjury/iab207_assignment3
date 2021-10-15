@@ -50,8 +50,7 @@ class User(UserMixin, db.Model):
     created_bookings = db.relationship('Booking', backref='user')
 
     def __repr__(self):
-        str = 'Name: {0}. Email: {1}'
-        str.format(self.name, self.emailid)
+        str = 'Name: {}. Email: {}'.format(self.name, self.emailid)
         return str
 
 
@@ -111,7 +110,7 @@ class Booking(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     tickets_booked = db.Column(db.Integer, nullable=False)
     booked_on = db.Column(db.DateTime, default=datetime.now(), nullable=False)
-    bookings = db.relationship('Event', backref='bookings')
+    booked_event = db.relationship('Event', backref='bookings')
     # FK's
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     event_id = db.Column(db.Integer, db.ForeignKey(
