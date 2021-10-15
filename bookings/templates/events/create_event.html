@@ -5,10 +5,9 @@
 <div id='page-container' class='container'>
     <div class="row">
         <br>
-        <h1 class="display-5 fw-bold">Create a new Event</h1>
-        <h6><i>A confirmation email will be sent shortly after submission to confirm your event is live on the
-                site.</i></h6>
+        <h1 class="display-5 fw-bold">{{heading}}</h1>
         {{wtf.quick_form(event_form)}}
     </div>
-</div><!-- end container -->
+</div>
+<!-- end container -->
 {% endblock %}
