@@ -36,7 +36,12 @@
                     <div class='row'>
                         {% if event.tickets_remaining == 0 %}
                         <div class='col-6'>
+                            <h2><strong>{{"$%.2f"|format(event.price)}}</strong> ea.</h2>
                             <p style="color:red"><strong>Sorry, sold out!</strong></p>
+                        </div>
+                        {% elif event.event_status.name == 'INACTIVE' or event.event_status.name == 'CANCELLED'  %}
+                        <div class='col-6'>
+                            <h2><strong>{{"$%.2f"|format(event.price)}}</strong> ea.</h2>
                         </div>
                         {% else %}
                         <div class='col-6'>
