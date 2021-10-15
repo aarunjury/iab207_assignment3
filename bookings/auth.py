@@ -7,13 +7,14 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 authbp = Blueprint('auth', __name__)
 
-#Checks if the current user is Anonymous or logged in
+# Checks if the current user is Anonymous or logged in
 def is_current_user():
     if current_user.name == 'Guest':
         name = 'Guest'
     else:
         name = current_user.name
     return name
+
 
 @authbp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -26,13 +27,13 @@ def login():
         # check if the user actually exists
         # take the user-supplied password, hash it, and compare it to the hashed password in the database
         if not user or not check_password_hash(user.password_hash, password):
-            flash('Please check your login details and try again.')
+            flash('Please check your login details and try again.', 'warning')
             # if the user doesn't exist or password is wrong, reload the page
             return redirect(url_for('auth.login'))
         else:
             login_user(user, remember=remember)
             print('Successfully logged in')
-            flash('You logged in successfully')
+            flash('You logged in successfully', 'success')
             return redirect(url_for('main.index'))
     # General objects reqd. for loading page
     name = is_current_user()
@@ -53,7 +54,7 @@ def register():
         user = User.query.filter_by(emailid=form.email_id.data).first()
         if user:  # if a user is found, we want to redirect back to signup page so user can try again
             flash(
-                'Email address already exists. Login using that email or try using a different email.')
+                'Email address already exists. Login using that email or try using a different email.', 'warning')
             return redirect(url_for('auth.register'))
         address.append(str(form.street_no.data))
         address.append(form.street_name.data)
@@ -64,7 +65,7 @@ def register():
             form.password.data, method='sha256'), phone=form.phone.data, address=address_string)
         db.session.add(user)
         db.session.commit()
-        flash('Successfully created new user! Please login to continue.')
+        flash('Successfully created new user! Please login to continue.', 'success')
         return redirect(url_for('auth.login'))
     # General objects reqd. for loading page
     name = is_current_user()
