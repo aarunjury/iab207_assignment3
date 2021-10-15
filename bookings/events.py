@@ -10,14 +10,6 @@ from flask_login import current_user
 
 eventbp = Blueprint('events', __name__, url_prefix='/events')
 
-# Checks if the current user is Anonymous or logged in
-def is_current_user():
-    if current_user.name == 'Guest':
-        name = 'Guest'
-    else:
-        name = current_user.name
-    return name
-
 
 @eventbp.route('/<id>')
 def show(id):
@@ -28,56 +20,34 @@ def show(id):
     if booking_form.validate_on_submit():
         return redirect(url_for('main.index'))
     artist_events = Event.query.filter_by(headliner=event.headliner).all()
-    # Objects reqd. for page loading
-    name = is_current_user()
-    events = Event.query.all()
-    dropdown_events = Event.query.group_by(Event.headliner)
-    genres = EventGenre
-    cities = EventCity
-    return render_template('events/event_details.html', event=event, artist_list=dropdown_events, form=comments_form, booking_form=booking_form, username=name, events_list=events, artist_events=artist_events, genres=genres, cities=cities)
+    return render_template('events/event_details.html', event=event, form=comments_form, booking_form=booking_form, artist_events=artist_events)
 
 
 @eventbp.route('/view_all')
 def view_all_events():
-    name = is_current_user()
-    events_list_all = Event.query.all()
-    dropdown_events = Event.query.group_by(Event.headliner)
-    genres = EventGenre
-    cities = EventCity
-    return render_template('events/view_events.html', cities=cities, artist_list=dropdown_events, username=name, heading='All Events', events=events_list_all, genres=genres, events_list=events_list_all)
+    events = Event.query.all()
+    return render_template('events/view_events.html', heading='All Events', events=events)
 
 
 @eventbp.route('/view_all/<genre>')
 def view_events(genre):
     genre = genre.upper()
     genre_events_list = Event.query.filter_by(event_genre=genre).all()
-    # Objects reqd. for page loading
-    name = is_current_user()
-    events_list_all = Event.query.all()
-    dropdown_events = Event.query.group_by(Event.headliner)
-    genres = EventGenre
-    cities = EventCity
-    return render_template('events/view_events.html', cities=cities, artist_list=dropdown_events, username=name, heading=genre, events=genre_events_list, genres=genres, events_list=events_list_all)
+    return render_template('events/view_events.html', heading=genre, events=genre_events_list)
 
 
 @eventbp.route('/view_all/city/<city_name>')
 def view_events_city(city_name):
     city_name = city_name.upper()
     city_events = Event.query.filter_by(event_city=city_name).all()
-    # Objects reqd. for page loading
-    name = is_current_user()
-    events_list_all = Event.query.all()
-    dropdown_events = Event.query.group_by(Event.headliner)
-    genres = EventGenre
-    cities = EventCity
-    return render_template('events/view_events.html', cities=cities, artist_list=dropdown_events, username=name, heading=city_name, events=city_events, genres=genres, events_list=events_list_all)
+    return render_template('events/view_events.html', heading=city_name, events=city_events)
 
 
 @eventbp.route('/create', methods=['GET', 'POST'])
 @login_required
 def create():
-    print('Method type: ', request.method)
     form = EventForm()
+    print(str(form.date.data))
     if form.validate_on_submit():
         # call the function that checks and returns image
         db_file_path = check_upload_file(form)
@@ -89,16 +59,12 @@ def create():
         db.session.add(event)
         # commit to the database
         db.session.commit()
-        flash('Successfully created new event')
+        flash('Successfully created new event','success')
         print('Successfully created new event')
         # Always end with redirect when form is valid
         return redirect(url_for('main.my_events'))
-    # Objects reqd. for page loading
-    events_list = Event.query.all()
-    dropdown_events = Event.query.group_by(Event.headliner)
-    genres = EventGenre
-    cities = EventCity
-    return render_template('events/create_event.html', cities=cities, artist_list=dropdown_events, event_form=form, username=current_user.name, events_list=events_list, genres=genres)
+    print(str(form.date.data))
+    return render_template('events/create_event.html', event_form=form, heading='Create a new Event')
 
 
 @eventbp.route('/<id>/update', methods=['GET', 'POST'])
@@ -124,16 +90,14 @@ def update_event(id):
         flash("You can only edit your own events!", 'danger')
         return redirect(url_for('main.my_events'))
     if form.validate_on_submit():
-        # If a new image was supplied, update it (need to check since it is not mandatory on the EditEventForm)
+        # If a new image was supplied, update it (need to check since it is not mandatory
+        # to supply an image on the EditEventForm, therefore check_upload_file would write an
+        # empty string to the event's image database column)
         if (form.image.data is not None):
             # call the function that checks and returns image
             db_file_path = check_upload_file(form)
             Event.query.filter_by(id=id).update(
                 {'image': db_file_path}, synchronize_session='evaluate')
-        else:
-            Event.query.filter_by(id=id).update(
-                {'image': event.image}, synchronize_session='evaluate')
-        # Find the Event object in the DB to be edited and update its values
         Event.query.filter_by(id=id).update(
             {'title': form.title.data, 'date': form.date.data, 'headliner': form.headliner.data,
              'venue': form.venue.data, 'description': form.desc.data,
@@ -147,12 +111,7 @@ def update_event(id):
         flash('Successfully updated event!', 'success')
         # end with redirect when form is valid
         return redirect(url_for('main.my_events'))
-    # Objects reqd. for page loading
-    events_list = Event.query.all()
-    dropdown_events = Event.query.group_by(Event.headliner)
-    genres = EventGenre
-    cities = EventCity
-    return render_template('events/edit_event.html', cities=cities, event_form=form, artist_list=dropdown_events,  event=event, username=current_user.name, events_list=events_list, genres=genres)
+    return render_template('events/create_event.html', event_form=form, event=event, heading='Edit Event')
 
 
 @eventbp.route('/<id>/delete', methods=['GET', 'POST'])
@@ -191,19 +150,6 @@ def comment(id):
     # using redirect sends a GET request to destination.show
     return redirect(url_for('events.show', id=id))
 
-# Function to check if a booking should be allowed to execute
-
-
-def check_tickets(form, event):
-    if form.tickets_required.data <= 0:
-        flash("You must book at least one ticket!", 'warning')
-        return False
-    else:
-        if event.tickets_remaining - form.tickets_required.data < 0:
-            flash("Your order cannot be placed as it exceeds the number of tickets remaining. Reduce the quantity and try again.", 'danger')
-            return False
-    return True
-
 
 @eventbp.route('/<id>/book', methods=['GET', 'POST'])
 @login_required
@@ -213,9 +159,6 @@ def book_event(id):
     # check to see if the booking should be allowed to go ahead
     if check_tickets(form, event) == True:
         if form.validate_on_submit():
-            # If this booking exhausts the remaining tickets, set it to Booked Out
-            if event.tickets_remaining - form.tickets_required.data == 0:
-                event.event_status = EventStatus.BOOKED
             # Create the new booking object
             new_booking = Booking(
                 tickets_booked=form.tickets_required.data, booked_on=datetime.now(), user_id=current_user.id, event_id=id)
@@ -226,7 +169,7 @@ def book_event(id):
             db.session.commit()
             flash_string = "Your booking was successfully created! You've been charged ${:,.2f}. Your booking reference is: {}".format(
                 (event.price)*(new_booking.tickets_booked), new_booking.id)
-            flash(flash_string)
+            flash(flash_string,'success')
             print('Your booking was successfully created!', 'success')
             return redirect(url_for('events.show', id=id))
     return redirect(url_for('events.show', id=id))
@@ -247,3 +190,21 @@ def check_upload_file(form):
     # save the file and return the db upload path
     fp.save(upload_path)
     return db_upload_path
+
+# Function to check if a booking should be allowed to execute
+def check_tickets(form, event):
+    # If some idiot is trying to book no tickets or negative tickets
+    if form.tickets_required.data <= 0:
+        flash("You must book at least one ticket!", 'warning')
+        return False
+    # Otherwise, if their booking will result in negative tickets
+    elif event.tickets_remaining - form.tickets_required.data < 0:
+            flash("Your order cannot be placed as it exceeds the number of tickets remaining. Reduce the quantity and try again.", 'danger')
+            return False
+    # Otherwise let the booking go ahead
+    else:
+        # If this booking exhausts the remaining tickets, set it to Booked Out
+        if event.tickets_remaining - form.tickets_required.data == 0:
+            event.event_status = EventStatus.BOOKED
+            return True
+    return True

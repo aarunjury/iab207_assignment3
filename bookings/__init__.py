@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
@@ -30,22 +31,33 @@ def create_app():
     def load_user(user_id):
         # since the user_id is just the primary key of our user table, use it in the query for the user
         return User.query.get(int(user_id))
+    
+    @app.context_processor
+    def get_context():
+        # Checks if the current user is Anonymous or logged in
+        if current_user.name == 'Guest':
+            name = 'Guest'
+        else:
+            name = current_user.name
+        from bookings.models import Event, EventCity, EventGenre, EventStatus
+        all_events = Event.query.all()
+        # On launch, check if there are any events that are now in the past
+        # and if so, change them to Inactive
+        for event in all_events:
+            if event.date < datetime.now():
+                event.event_status=EventStatus.INACTIVE
+        dropdown_events = Event.query.group_by(Event.headliner)
+        genres = EventGenre
+        cities = EventCity
+        return(dict(events_list=all_events,artist_list=dropdown_events,genres=genres,cities=cities,username=name))
 
     @app.errorhandler(404)
     def not_found(e):  # error view function
-        from .models import Event, EventGenre, EventCity
-        all_events = Event.query.all()
-        genres = EventGenre
-        cities = EventCity
-        return render_template('fourohfour.html', cities=cities, username=current_user.name, events=current_user.created_events, events_list=all_events, genres=genres), 404
+        return render_template('fourohfour.html'), 404
 
     @app.errorhandler(500)
     def not_found(e):  # error view function
-        from .models import Event, EventGenre, EventCity
-        all_events = Event.query.all()
-        genres = EventGenre
-        cities = EventCity
-        return render_template('fourohfour.html', cities=cities, username=current_user.name, events=current_user.created_events, events_list=all_events, genres=genres), 500
+        return render_template('fourohfour.html'), 500
 
         # @app.errorhandler(Exception)
         # def handle_exception(e):
@@ -58,6 +70,6 @@ def create_app():
         #         return e
         # # now you're handling non-HTTP exceptions only
         #     print(e)
-        #     return render_template('fourohfour.html', cities=cities, username=current_user.name, events=current_user.created_events, events_list=all_events, genres=genres), 500
+        #     return render_template('fourohfour.html'), 500
 
     return app

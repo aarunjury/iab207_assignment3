@@ -35,23 +35,17 @@ def login():
             print('Successfully logged in')
             flash('You logged in successfully', 'success')
             return redirect(url_for('main.index'))
-    # General objects reqd. for loading page
-    name = is_current_user()
-    all_events = Event.query.all()
-    dropdown_events = Event.query.group_by(Event.headliner)
-    genres = EventGenre
-    cities = EventCity
-    return render_template('user.html', form=loginForm, artist_list=dropdown_events, heading='Login', username=name, genres=genres, cities=cities, events_list=all_events)
+    return render_template('user.html', form=loginForm, heading='Login')
 
 
 @authbp.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
-
     address = []
     if form.validate_on_submit():
         # if this returns a user, then the email already exists in database
         user = User.query.filter_by(emailid=form.email_id.data).first()
+        user = User.query.filter_by(name=form.user_name.data).first()
         if user:  # if a user is found, we want to redirect back to signup page so user can try again
             flash(
                 'Email address already exists. Login using that email or try using a different email.', 'warning')
@@ -59,7 +53,7 @@ def register():
         address.append(str(form.street_no.data))
         address.append(form.street_name.data)
         address.append(form.state.data)
-        address.append(str(form.postcode.data))
+        address.append(form.postcode.data)
         address_string = ' '.join(str(item) for item in address)
         user = User(name=form.user_name.data, emailid=form.email_id.data, password_hash=generate_password_hash(
             form.password.data, method='sha256'), phone=form.phone.data, address=address_string)
@@ -67,13 +61,7 @@ def register():
         db.session.commit()
         flash('Successfully created new user! Please login to continue.', 'success')
         return redirect(url_for('auth.login'))
-    # General objects reqd. for loading page
-    name = is_current_user()
-    all_events = Event.query.all()
-    dropdown_events = Event.query.group_by(Event.headliner)
-    genres = EventGenre
-    cities = EventCity
-    return render_template('user.html', form=form, heading='Register', artist_list=dropdown_events, username=name, genres=genres, cities=cities, events_list=all_events)
+    return render_template('user.html', form=form, heading='Register')
 
 
 @authbp.route("/logout")
