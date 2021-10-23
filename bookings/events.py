@@ -22,7 +22,8 @@ def show(id):
     artist_events = Event.query.filter_by(headliner=event.headliner).all()
     return render_template('events/event_details.html', event=event, form=comments_form, booking_form=booking_form, artist_events=artist_events)
 
-
+# could probably get rid of all of these view all routes and replace with
+# queries in a single search route
 @eventbp.route('/view_all')
 def view_all_events():
     events = Event.query.all()
