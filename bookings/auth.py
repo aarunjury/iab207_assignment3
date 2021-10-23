@@ -40,6 +40,8 @@ def login():
 
 @authbp.route('/register', methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('main.index'))
     form = RegisterForm()
     address = []
     if form.validate_on_submit():
@@ -68,4 +70,5 @@ def register():
 @login_required
 def logout():
     logout_user()
+    flash('You have successfully logged out', 'success')
     return redirect(url_for('main.index'))
