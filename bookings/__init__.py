@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 from flask import Flask, render_template
 from flask_bootstrap import Bootstrap
@@ -13,7 +14,7 @@ def create_app():
     app = Flask(__name__)
     bootstrap = Bootstrap(app)
     app.secret_key = "1234567890"
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ticketsmarter.sqlite'
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
     app.config['UPLOAD_FOLDER'] = 'static/images/'
     db.init_app(app)
     login_manager = LoginManager()
@@ -41,6 +42,7 @@ def create_app():
             name = current_user.name
         from bookings.models import Event, EventCity, EventGenre, EventStatus
         all_events = Event.query.all()
+        current_events = Event.query.filter(Event.event_status!='INACTIVE')
         # On launch, check if there are any events that are now in the past
         # and if so, change them to Inactive
         for event in all_events:
@@ -50,7 +52,7 @@ def create_app():
         dropdown_events = Event.query.group_by(Event.headliner)
         genres = EventGenre
         cities = EventCity
-        return(dict(events_list=all_events,artist_list=dropdown_events,genres=genres,cities=cities,username=name))
+        return(dict(events_list=all_events,artist_list=dropdown_events,genres=genres,cities=cities,username=name,current_events=current_events))
 
     @app.errorhandler(404)
     def not_found(e):  # error view function
@@ -60,17 +62,17 @@ def create_app():
     def not_found(e):  # error view function
         return render_template('fourohfour.html'), 500
 
-        # @app.errorhandler(Exception)
-        # def handle_exception(e):
-        #     from .models import Event, EventGenre, EventCity
-        #     all_events = Event.query.all()
-        #     genres = EventGenre
-        #     cities = EventCity
-        # # pass through HTTP errors
-        #     if isinstance(e, HTTPException):
-        #         return e
-        # # now you're handling non-HTTP exceptions only
-        #     print(e)
-        #     return render_template('fourohfour.html'), 500
+    @app.errorhandler(Exception)
+    def handle_exception(e):
+        from .models import Event, EventGenre, EventCity
+        all_events = Event.query.all()
+        genres = EventGenre
+        cities = EventCity
+    # pass through HTTP errors
+        if isinstance(e, HTTPException):
+            return e
+    # now you're handling non-HTTP exceptions only
+        print(e)
+        return render_template('fourohfour.html'), 500
 
     return app
