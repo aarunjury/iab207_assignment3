@@ -21,16 +21,7 @@ def index():
 @mainbp.route('/my_bookings')
 @login_required
 def my_bookings():
-    # First get the all the current user's bookings
-    bookings = Booking.query.filter_by(user_id=current_user.id).all()
-    print(current_user.id)
-    # Create an empty list to hold their Events pertaining to each Booking
-    booked_events = []
-    # Add the booked events to the list
-    for booking in bookings:
-        booked_events += Event.query.filter_by(id=booking.event_id).all()
-    print(booked_events)
-    return render_template('events/my_events.html', heading='My Bookings', bookings=bookings, events=booked_events)
+    return render_template('events/my_events.html', heading='My Bookings', bookings=current_user.created_bookings)
 
 
 @mainbp.route('/my_events')
@@ -43,13 +34,13 @@ def my_events():
 def search():
     if request.args['search']:
         print(request.args['search'])
-        event = "%" + request.args['search'] + '%'
+        query = "%" + request.args['search'] + '%'
         events = Event.query.filter(
-            Event.description.like(event)).all()
-        events += Event.query.filter(Event.title.like(event)).all()
-        events += Event.query.filter(Event.event_city.like(event)).all()
-        events += Event.query.filter(Event.event_genre.like(event)).all()
-        # Filter out duplicates
+            Event.description.like(query)).all()
+        events += Event.query.filter(Event.title.like(query)).all()
+        events += Event.query.filter(Event.event_city.like(query)).all()
+        events += Event.query.filter(Event.event_genre.like(query)).all()
+        # Filter out duplicates (__eq__ has been set on the model for comparison)
         events = list(set(events))
         return render_template('events/view_events.html', heading='Search Results', events=events)
     else:
