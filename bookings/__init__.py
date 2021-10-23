@@ -14,7 +14,8 @@ def create_app():
     app = Flask(__name__)
     bootstrap = Bootstrap(app)
     app.secret_key = "1234567890"
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+    # app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ticketsmarter.sqlite'
     app.config['UPLOAD_FOLDER'] = 'static/images/'
     db.init_app(app)
     login_manager = LoginManager()
