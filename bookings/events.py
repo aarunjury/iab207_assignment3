@@ -47,14 +47,18 @@ def view_events_city(city_name):
 @login_required
 def create():
     form = EventForm()
-    print(str(form.date.data))
-    if form.validate_on_submit():
+    proceed = True
+    if form.date.data != None and form.date.data < datetime.now():
+        flash("You can't create an event in the past!", 'danger')
+        proceed = False
+        #return redirect(url_for('main.my_events'))
+    if form.validate_on_submit() and proceed == True:
         # call the function that checks and returns image
         db_file_path = check_upload_file(form)
         event = Event(title=form.title.data, date=form.date.data, headliner=form.headliner.data, venue=form.venue.data, description=form.desc.data,
-                      image=db_file_path, total_tickets=form.total_tickets.data, tickets_remaining=form.total_tickets.data, price=form.price.data, event_status=EventStatus(
-                          1).name,
-                      event_genre=form.event_genre.data.upper(), event_city=form.event_city.data.upper(), created_on=datetime.now(), user_id=current_user.id)
+                    image=db_file_path, total_tickets=form.total_tickets.data, tickets_remaining=form.total_tickets.data, price=form.price.data, event_status=EventStatus(
+                        1).name,
+                    event_genre=form.event_genre.data.upper(), event_city=form.event_city.data.upper(), created_on=datetime.now(), user_id=current_user.id)
         # add the object to the db session
         db.session.add(event)
         # commit to the database
@@ -63,7 +67,6 @@ def create():
         print('Successfully created new event')
         # Always end with redirect when form is valid
         return redirect(url_for('main.my_events'))
-    print(str(form.date.data))
     return render_template('events/create_event.html', event_form=form, heading='Create a new Event')
 
 
@@ -146,7 +149,6 @@ def comment(id):
         db.session.commit()
         # flashing a message which needs to be handled by the html
         flash('Your comment has been added', 'primary')
-        print('Your comment has been added')
     # using redirect sends a GET request to destination.show
     return redirect(url_for('events.show', id=id))
 
@@ -157,7 +159,7 @@ def book_event(id):
     form = BookingForm()
     event = Event.query.filter_by(id=id).first()
     # check to see if the booking should be allowed to go ahead
-    if check_tickets(form, event) == True:
+    if check_tickets(form, event):
         if form.validate_on_submit():
             # Create the new booking object
             new_booking = Booking(
@@ -170,7 +172,6 @@ def book_event(id):
             flash_string = "Your booking was successfully created! You've been charged ${:,.2f}. Your booking reference is: {}".format(
                 (event.price)*(new_booking.tickets_booked), new_booking.id)
             flash(flash_string,'success')
-            print('Your booking was successfully created!', 'success')
             return redirect(url_for('events.show', id=id))
     return redirect(url_for('events.show', id=id))
 
@@ -193,8 +194,13 @@ def check_upload_file(form):
 
 # Function to check if a booking should be allowed to execute
 def check_tickets(form, event):
+    # Form data will be None if alpha is included since the FormField is
+    # IntegerField
+    if form.tickets_required.data is None:
+        flash("You must use a numerical number!", 'warning')
+        return False
     # If some idiot is trying to book no tickets or negative tickets
-    if form.tickets_required.data <= 0:
+    elif form.tickets_required.data <= 0:
         flash("You must book at least one ticket!", 'warning')
         return False
     # Otherwise, if their booking will result in negative tickets
