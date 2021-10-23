@@ -7,7 +7,7 @@
     <div class='row'>
         <h1>{{heading}}</h1>
         <p>
-        <h5>Hey, {{username}}! {% if events|length == 0 %}
+        <h5>Hey, {{username}}! {% if bookings|length == 0 %}
             <h5>You haven't booked any events!</h5>
             <h5><a href='{{url_for("events.view_all_events")}}'>Click here to get started.</a></h5>
             {% else %} Here is a list of all the past and upcoming events you've booked.
