@@ -14,8 +14,8 @@ def create_app():
     app = Flask(__name__)
     bootstrap = Bootstrap(app)
     app.secret_key = "1234567890"
-    # app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ticketsmarter.sqlite'
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+    #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ticketsmarter.sqlite'
     app.config['UPLOAD_FOLDER'] = 'static/images/'
     db.init_app(app)
     login_manager = LoginManager()
@@ -43,12 +43,12 @@ def create_app():
             name = current_user.name
         from bookings.models import Event, EventCity, EventGenre, EventStatus
         all_events = Event.query.all()
-        current_events = Event.query.filter(Event.event_status!='INACTIVE')
         # On launch, check if there are any events that are now in the past
         # and if so, change them to Inactive
         for event in all_events:
             if event.date < datetime.now():
                 event.event_status=EventStatus.INACTIVE
+        current_events = Event.query.filter(Event.event_status!='INACTIVE')
         db.session.commit()
         dropdown_events = Event.query.group_by(Event.headliner)
         genres = EventGenre
@@ -65,10 +65,6 @@ def create_app():
 
     @app.errorhandler(Exception)
     def handle_exception(e):
-        from .models import Event, EventGenre, EventCity
-        all_events = Event.query.all()
-        genres = EventGenre
-        cities = EventCity
     # pass through HTTP errors
         if isinstance(e, HTTPException):
             return e
