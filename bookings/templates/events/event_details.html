@@ -11,7 +11,7 @@
             </figure>
         </div>
         <div class='col-sm-12 col-md-6'>
-            <h4><strong>All Upcoming Events by This Artist:</strong></h4>
+            <h4><strong>Upcoming Events by This Artist:</strong></h4>
             {% for artist_event in artist_events %}
             <p><strong><a href='{{url_for("events.show", id=artist_event.id)}}'>{{artist_event.title}}</strong></a></p>
             <p>{{artist_event.date.strftime('%B %d, %Y @ %#I:%M
@@ -26,19 +26,24 @@
         <div class='col'>
             <div class='card'>
                 <div class='card-body'>
-                    <h1 class='card-title'>{{event.title}}</h1>
-                    <h2>{{event.date.strftime('%B %d, %Y @ %#I:%M
-                        %p')}} - <strong>{{event.event_status.name.title()}}</strong></h2>
                     <div class='row'>
-                        <h3>{{event.venue}}, {{event.event_city.name.title()}}</h3>
-                    </div>
-                    <div class='row'>
-                        <div class='col-xs-12 col-md-4'>
-                            <h6><strong>Genre: </strong>{{event.event_genre.name.title()}}</h6>
-                            <h6><strong>Created On: </strong>{{event.created_on.strftime('%d/%m/%Y')}}</h6>
+                        <div class='col-6'>
+                            <h1 class='card-title'>{{event.title}}</h1>
+                            <h2>{{event.date.strftime('%B %d, %Y @ %#I:%M
+                                %p')}} - <strong>{{event.event_status.name.title()}}</strong></h2>
+                            <div class='row'>
+                                <h3>{{event.venue}}, {{event.event_city.name.title()}}</h3>
+                            </div>
+                            <div class='row'>
+                                <div class='col-xs-12 col-md-4'>
+                                    <h6><strong>Genre: </strong>{{event.event_genre.name.title()}}</h6>
+                                    <h6><strong>Created On: </strong>{{event.created_on.strftime('%d/%m/%Y')}}</h6>
+                                </div>
+                            </div>
                         </div>
-                        <div class='col-xs-12 col-md-6'>
-
+                        <div class='col-6'>
+                            <h3><strong>Event Description:</strong></h3>
+                            <p class='card-text'>{{event.description}}</p>
                         </div>
                     </div>
                     <div class='row'>
@@ -103,10 +108,6 @@
             </div>
         </div>
     </div> <!-- end row -->
-    <div class='col-xs-12 col-lg-8 border-bottom'>
-        <h4><strong>Event Description:</strong></h4>
-        <p class='card-text'>{{event.description}}</p>
-    </div>
     <!-- Comments -->
     <div class='row'>
         <div class='col'>
