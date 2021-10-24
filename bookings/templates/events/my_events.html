@@ -64,7 +64,7 @@
                 <h3>{{event.venue}}, {{event.event_city.name.title()}}</h3>
                 <h6><strong>Event ID: </strong>{{event.id}}<strong> Created On:
                     </strong>{{event.created_on.strftime('%d/%m/%Y')}}</h6>
-                <h6><strong>Tickets Sold: </strong>{{event.tickets_booked}}</h6>
+                <h6><strong>Tickets Sold: </strong>{{event.tickets_booked}}<strong> Tickets Remaining: </strong>{{event.tickets_remaining}}</h6>
                 <div class='row'>
                     <div class='col-md-6 col-xl-3'>
                         <a href='{{url_for("events.update_event", id=event.id)}}' class='btn btn-outline-dark'
