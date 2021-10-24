@@ -1,6 +1,7 @@
-from flask import Blueprint, render_template, request, url_for, redirect
+from flask import Blueprint, render_template, request
 from .models import Event, EventCity, EventGenre, Booking
 from flask_login import login_required, current_user
+from . import db
 
 mainbp = Blueprint('main', __name__)
 
@@ -29,19 +30,31 @@ def my_bookings():
 def my_events():
     return render_template('events/my_events.html', heading='My Events', events=current_user.created_events)
 
-
-@mainbp.route('/search')
+    
+@mainbp.route('/search', methods=['GET','POST'])
 def search():
-    if request.args['search']:
-        print(request.args['search'])
-        query = "%" + request.args['search'] + '%'
-        events = Event.query.filter(
-            Event.description.like(query)).all()
-        events += Event.query.filter(Event.title.like(query)).all()
-        events += Event.query.filter(Event.event_city.like(query)).all()
-        events += Event.query.filter(Event.event_genre.like(query)).all()
-        # Filter out duplicates (__eq__ has been set on the model for comparison)
-        events = list(set(events))
-        return render_template('events/view_events.html', heading='Search Results', events=events)
-    else:
-        return redirect(url_for('main.index'))
+    # create query object
+    query = db.session.query(Event)
+    # loop through arguments
+    for arg in request.args:
+        # check if arg exists and is not empty
+        if (arg == 'genre' and request.args['genre'] != ''):
+            # update your query with the arg
+            query = query.filter(Event.event_genre.like(f"%{request.args['genre']}%"))
+
+        if (arg == 'city' and request.args['city'] != ''):
+            query = query.filter(Event.event_city.like(f"%{request.args['city']}%"))
+
+        # get destinations from your query
+        events = query.order_by(Event.title.asc()).all()
+        if (arg == 'search' and request.args['search'] != ''):
+            query = "%" + request.args['search'] + '%'
+            events = Event.query.filter(
+                Event.description.like(query)).all()
+            events += Event.query.filter(Event.title.like(query)).all()
+            events += Event.query.filter(Event.event_city.like(query)).all()
+            events += Event.query.filter(Event.event_genre.like(query)).all()
+            # Filter out duplicates (__eq__ has been set on the model for comparison)
+            events = list(set(events))
+    # return all events that meet the search criteria on a page
+    return render_template('events/view_events.html', heading='Search Results', events = events)
