@@ -16,16 +16,16 @@
             </div>
             <div class='carousel-inner'>
                 <div class='carousel-item active'>
-                    <a href='#'><img src='{{url_for("static", filename="images/applefest.jpeg")}}' class='d-block img-fluid w-100'
-                            alt='Apple Music Festival'></a>
+                    <a href='#'><img src='{{url_for("static", filename="images/applefest.jpeg")}}'
+                            class='d-block img-fluid w-100' alt='Apple Music Festival'></a>
                 </div>
                 <div class='carousel-item'>
-                    <a href='#'><img src='{{url_for("static", filename="images/live.jpg")}}' class='d-block img-fluid w-100'
-                            alt='Paramore Live in Concert'></a>
+                    <a href='#'><img src='{{url_for("static", filename="images/live.jpg")}}'
+                            class='d-block img-fluid w-100' alt='Paramore Live in Concert'></a>
                 </div>
                 <div class='carousel-item'>
-                    <a href='#'><img src='{{url_for("static", filename="images/flume.jpg")}}' class='d-block img-fluid w-100'
-                            alt='Flume Australian Tour'></a>
+                    <a href='#'><img src='{{url_for("static", filename="images/flume.jpg")}}'
+                            class='d-block img-fluid w-100' alt='Flume Australian Tour'></a>
                 </div>
             </div>
             <button class='carousel-control-prev' type='button' data-bs-target='#whats-on-carousel'
@@ -42,13 +42,41 @@
     </div>
     <br>
     <div class='row'>
+        <h1 class='display-5 fw-bold'>Search For An Event</h1>
+    </div>
+    <form action="{{url_for('main.search')}}" class="row gx-3 gy-2 align-items-center">
+        <div class="col-sm-4">
+            <select name="genre" class="form-select">
+                <option value='' selected>Select a genre...</option>
+                {% for genre in genres %}
+                <option value="{{genre.name.lower()}}">{{genre.name.title()}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-sm-4">
+            <select name="city" class="form-select">
+                <option value='' selected>Select a city...</option>
+                {% for city in cities %}
+                <option value="{{city.name.lower()}}">{{city.name.title()}}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-sm-3">
+            <input name="search" class="form-control mr-sm-2" type="search" placeholder="Search"
+                aria-label="Search"></input>
+        </div>
+        <div class="col-auto">
+            <button type="submit" id='searchbtn' class="btn btn-primary btn-block">Submit</button>
+        </div>
+    </form>
+    <br>
+    <div class='row'>
         <h1 class='display-5 fw-bold'>Featured Events</h1>
     </div>
     <div class='row'>
         {% for event in current_events %}
         <div class='col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch'>
             <div class='card mt-4'>
-                <!-- <img src="{{url_for('static', filename='{0}'.format(event.image))}}" class='card-img-top' alt=''> -->
                 <img src="{{event.image}}" class='card-img-top' alt=''>
                 <div class='card-body'>
                     <h5 class='card-title'><a href='{{url_for("events.show", id=event.id)}}'>{{event.title}}</a></h5>
