@@ -22,26 +22,36 @@ def show(id):
     artist_events = Event.query.filter_by(headliner=event.headliner).all()
     return render_template('events/event_details.html', event=event, form=comments_form, booking_form=booking_form, artist_events=artist_events)
 
-# could probably get rid of all of these view all routes and replace with
-# queries in a single search route
+
 @eventbp.route('/view_all')
 def view_all_events():
-    events = Event.query.all()
+    events = Event.query.filter(Event.event_status != 'INACTIVE').all()
     return render_template('events/view_events.html', heading='All Events', events=events)
-
-
-@eventbp.route('/view_all/<genre>')
-def view_events(genre):
-    genre = genre.upper()
-    genre_events_list = Event.query.filter_by(event_genre=genre).all()
-    return render_template('events/view_events.html', heading=genre, events=genre_events_list)
 
 
 @eventbp.route('/view_all/city/<city_name>')
 def view_events_city(city_name):
     city_name = city_name.upper()
-    city_events = Event.query.filter_by(event_city=city_name).all()
+    city_events = Event.query.filter_by(event_city=city_name).filter(
+        Event.event_status != 'INACTIVE').all()
     return render_template('events/view_events.html', heading=city_name, events=city_events)
+
+
+@eventbp.route('/view_all/<genre>')
+def view_events(genre):
+    genre = genre.upper()
+    genre_events_list = Event.query.filter_by(event_genre=genre).filter(
+        Event.event_status != 'INACTIVE').all()
+    return render_template('events/view_events.html', heading=genre, events=genre_events_list)
+
+
+@eventbp.route('/view_all/artist/<headliner>')
+def view_events_artist(headliner):
+    artist_events = Event.query.filter_by(headliner=headliner).filter(
+        Event.event_status != 'INACTIVE').all()
+    if len(artist_events) == 1:
+        return redirect(url_for('events.show', id=artist_events[0].id))
+    return render_template('events/view_events.html', heading=headliner, events=artist_events)
 
 
 @eventbp.route('/create', methods=['GET', 'POST'])
@@ -57,9 +67,9 @@ def create():
         # call the function that checks and returns image
         db_file_path = check_upload_file(form)
         event = Event(title=form.title.data, date=form.date.data, headliner=form.headliner.data, venue=form.venue.data, description=form.desc.data,
-                    image=db_file_path, total_tickets=form.total_tickets.data, tickets_remaining=form.total_tickets.data, price=form.price.data, event_status=EventStatus(
-                        1).name,
-                    event_genre=form.event_genre.data.upper(), event_city=form.event_city.data.upper(), created_on=datetime.now(), user_id=current_user.id)
+                      image=db_file_path, total_tickets=form.total_tickets.data, tickets_remaining=form.total_tickets.data, price=form.price.data, event_status=EventStatus(
+                          1).name,
+                      event_genre=form.event_genre.data.upper(), event_city=form.event_city.data.upper(), created_on=datetime.now(), user_id=current_user.id)
         # add the object to the db session
         db.session.add(event)
         # commit to the database
@@ -198,7 +208,7 @@ def check_tickets(form, event):
     # Form data will be None if alpha is included since the FormField is
     # IntegerField
     if form.tickets_required.data is None:
-        flash("You must use a numerical number!", 'warning')
+        flash("You must enter only a number!", 'warning')
         return False
     # If some idiot is trying to book no tickets or negative tickets
     elif form.tickets_required.data <= 0:
@@ -206,8 +216,8 @@ def check_tickets(form, event):
         return False
     # Otherwise, if their booking will result in negative tickets
     elif event.tickets_remaining - form.tickets_required.data < 0:
-            flash("Your order cannot be placed as it exceeds the number of tickets remaining. Reduce the quantity and try again.", 'danger')
-            return False
+        flash("Your order cannot be placed as it exceeds the number of tickets remaining. Reduce the quantity and try again.", 'danger')
+        return False
     # Otherwise let the booking go ahead
     else:
         # If this booking exhausts the remaining tickets, set it to Booked Out
