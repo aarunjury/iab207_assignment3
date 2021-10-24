@@ -26,8 +26,7 @@
         <nav class='navbar navbar-expand-lg navbar-dark'>
             <div class='container'>
                 <a class='navbar-brand' href='/'><img src='{{url_for("static", filename="images/icon.png")}}' width='30'
-                        height='30' class='d-inline-block align-top' alt=''> TicketSmarter
-                </a>
+                        height='30' class='d-inline-block align-top' alt=''> TicketSmarter</a>
                 <button class='navbar-toggler' type='button' data-bs-toggle='collapse'
                     data-bs-target='#navbarSupportedContent' aria-controls='navbarSupportedContent'
                     aria-expanded='false' aria-label='Toggle navigation'>
@@ -37,21 +36,16 @@
                     <ul class='navbar-nav me-auto mb-2 mb-lg-0'>
                         <li class='nav-item dropdown'>
                             <a class='nav-link dropdown-toggle' href='#' id='navbarDropdown' role='button'
-                                data-bs-toggle='dropdown' aria-expanded='false'>
-                                City
-                            </a>
+                                data-bs-toggle='dropdown' aria-expanded='false'>City</a>
                             <ul class='dropdown-menu dropdown-menu-dark' aria-labelledby='navbarDropdown'>
                                 {% for city in cities %}
-                                <!-- changing the city name to lower so it doesn't display as upper in the url -->
                                 <li><a class='dropdown-item'
                                         href='{{url_for("events.view_events_city", city_name=city.name.lower())}}'>{{city.name.title()}}</a>
                                 </li>
                                 <hr class='dropdown-divider'>
                                 {% endfor %}
-                                <li>
-                                </li>
-                                <li><a class='dropdown-item' href='{{url_for("events.view_all_events")}}'>Browse All
-                                        Events</a></li>
+                                <li><a class='dropdown-item' href='{{url_for("events.view_all_events")}}'>
+                                        Browse All Events</a></li>
                             </ul>
                         </li>
                         <li class='nav-item dropdown'>
@@ -78,10 +72,10 @@
                                 Artist
                             </a>
                             <ul class='dropdown-menu dropdown-menu-dark' aria-labelledby='navbarDropdown'>
-                                <!-- will need to set a maximum number of times to loop, maybe loop in range of 10 instead? -->
                                 {% for artist in artist_list %}
                                 <li><a class='dropdown-item'
-                                        href='{{url_for("events.show", id=artist.id)}}'>{{artist.headliner}}</a></li>
+                                        href='{{url_for("events.view_events_artist", headliner=artist.headliner)}}'>{{artist.headliner}}</a>
+                                </li>
                                 <hr class='dropdown-divider'>
                                 {% endfor %}
                                 <li>
@@ -111,28 +105,20 @@
                                 <li><a class='dropdown-item' href='{{url_for("events.create")}}'>Create New Event</a>
                                 </li>
                                 <li>
-                                    {% if username|lower == 'guest' %}
                                     <hr class='dropdown-divider'>
+                                </li>
+                                {% if username|lower == 'guest' %}
                                 <li><a class='dropdown-item' href='{{url_for("auth.login")}}'>Login</a></li>
-                        </li>
-                        {% else %} {% endif %}
-                        <li>
-                            <hr class='dropdown-divider'> {% if username|lower == 'guest' %}
-                        <li><a class='dropdown-item' href='{{url_for("auth.register")}}'>Sign Up</a></li>
-                        {% else %}
-                        <li><a class='dropdown-item' href='{{url_for("auth.logout")}}'>Logout</a></li>
-                        {% endif %}
+                                <li>
+                                    <hr class='dropdown-divider'>
+                                </li>
+                                <li><a class='dropdown-item' href='{{url_for("auth.register")}}'>Sign Up</a></li>
+                                {% else %}
+                                <li><a class='dropdown-item' href='{{url_for("auth.logout")}}'>Logout</a></li>
+                                {% endif %}
+                            </ul>
                         </li>
                     </ul>
-                    </li>
-                    </ul>
-                    <form class='d-flex' action="{{url_for('main.search')}}">
-                        <input type="text" name="search" class="form-control flex-grow-1 my-1 mr-sm-2" id="SearchForm"
-                            placeholder='Search for an event' aria-label='Search'>
-                        <button id='search-button' class='btn btn-outline-light' type='submit' color='white'>
-                            Search
-                        </button>
-                    </form>
                 </div>
             </div>
         </nav>
@@ -140,17 +126,17 @@
 
     <main>
         <br>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
         <div class="container">
-            {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
             {% for category, message in messages %}
             <div class="alert alert-{{category}}" role="alert">
                 {{message}}
             </div>
             {% endfor %}
-            {% endif %}
-            {% endwith %}
         </div>
+        {% endif %}
+        {% endwith %}
         {% block content %}
         {% endblock %}
     </main>
@@ -184,9 +170,7 @@
                         <div class='row'>
                             <p><a href='mailto:info@ticketsmarter.com.au'>info@ticketsmarter.com.au</a> | <a
                                     href='tel:18008425387'>1800TICKETS</a> | &copy; 2021 TicketSmarter Pty Ltd (ABN 92
-                                010
-                                129
-                                110). All rights reserved.</p>
+                                010 129 110). All rights reserved.</p>
                         </div>
                     </div>
                 </div>
