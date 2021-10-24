@@ -45,7 +45,7 @@
         <h1 class='display-5 fw-bold'>Search For An Event</h1>
     </div>
     <form action="{{url_for('main.search')}}" class="row gx-3 gy-2 align-items-center">
-        <div class="col-sm-4">
+        <div class="col-md-4">
             <select name="genre" class="form-select">
                 <option value='' selected>Select a genre...</option>
                 {% for genre in genres %}
@@ -53,7 +53,7 @@
                 {% endfor %}
             </select>
         </div>
-        <div class="col-sm-4">
+        <div class="col-md-4">
             <select name="city" class="form-select">
                 <option value='' selected>Select a city...</option>
                 {% for city in cities %}
@@ -61,11 +61,11 @@
                 {% endfor %}
             </select>
         </div>
-        <div class="col-sm-3">
+        <div class="col-md-3">
             <input name="search" class="form-control mr-sm-2" type="search" placeholder="Search"
                 aria-label="Search"></input>
         </div>
-        <div class="col-auto">
+        <div class="col-md-1">
             <button type="submit" id='searchbtn' class="btn btn-primary btn-block">Submit</button>
         </div>
     </form>
