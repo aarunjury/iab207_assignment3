@@ -53,6 +53,10 @@ h1 {
   white-space: normal;
 }
 
+#searchbtn{
+  margin-top: 0;
+}
+
 .figure-caption {
   color: #000000;
 }
