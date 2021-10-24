@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from .forms import LoginForm, RegisterForm
-from .models import Event, EventCity, EventGenre, User
+from .models import User
 from . import db
 from flask_login import login_required, logout_user, login_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
