@@ -27,7 +27,7 @@
             <div class='card'>
                 <div class='card-body'>
                     <div class='row'>
-                        <div class='col-6'>
+                        <div class='col-xs-12 col-md-6'>
                             <h1 class='card-title'>{{event.title}}</h1>
                             <h2>{{event.date.strftime('%B %d, %Y @ %#I:%M
                                 %p')}} - <strong>{{event.event_status.name.title()}}</strong></h2>
@@ -35,13 +35,13 @@
                                 <h3>{{event.venue}}, {{event.event_city.name.title()}}</h3>
                             </div>
                             <div class='row'>
-                                <div class='col-xs-12 col-md-4'>
+                                <div class='col-xs-12'>
                                     <h6><strong>Genre: </strong>{{event.event_genre.name.title()}}</h6>
                                     <h6><strong>Created On: </strong>{{event.created_on.strftime('%d/%m/%Y')}}</h6>
                                 </div>
                             </div>
                         </div>
-                        <div class='col-6'>
+                        <div class='col-xs-12 col-md-6'>
                             <h3><strong>Event Description:</strong></h3>
                             <p class='card-text'>{{event.description}}</p>
                         </div>

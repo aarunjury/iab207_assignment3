@@ -14,9 +14,9 @@ def create_app():
     app = Flask(__name__)
     bootstrap = Bootstrap(app)
     app.secret_key = "1234567890"
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL').replace("://", "ql://", 1)
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-    #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ticketsmarter.sqlite'
+    #SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL').replace("://", "ql://", 1)
+    #app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ticketsmarter.sqlite'
     app.config['UPLOAD_FOLDER'] = 'static/images/'
     db.init_app(app)
     login_manager = LoginManager()
@@ -51,7 +51,8 @@ def create_app():
                 event.event_status=EventStatus.INACTIVE
         current_events = Event.query.filter(Event.event_status!='INACTIVE')
         db.session.commit()
-        dropdown_events = Event.query.group_by(Event.headliner)
+        dropdown_events = Event.query.group_by(Event.headliner).filter(
+        Event.event_status != 'INACTIVE').all()
         genres = EventGenre
         cities = EventCity
         return(dict(events_list=all_events,artist_list=dropdown_events,genres=genres,cities=cities,username=name,current_events=current_events))
