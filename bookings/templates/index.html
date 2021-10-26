@@ -82,8 +82,10 @@
                     <h5 class='card-title'><a href='{{url_for("events.show", id=event.id)}}'>{{event.title}}</a></h5>
                     {% if event.tickets_remaining == 0 %}
                     <h6 class='card-subtitle mb-2' style="color:red">{{event.event_status.name.title()}}</h6>
+                    <h6 class='card-subtitle mb-2'>{{event.event_genre.name.title()}}</h6>
                     {% else %}
                     <h6 class='card-subtitle mb-2 text-muted'>{{event.event_status.name.title()}}</h6>
+                    <h6 class='card-subtitle mb-2'>{{event.event_genre.name.title()}}</h6>
                     {% endif %}
                     <p id='index-cards' class='card-text'>{{event.description}}</p>
                     <a href='{{url_for("events.show", id=event.id)}}' class='mt-auto btn btn-outline-dark'>See more</a>
@@ -99,8 +101,8 @@
     <div class='row'>
         {% for genre in genres %}
         <div class='col-6 col-xl-4'>
-            <a href='{{url_for("events.view_events", genre=genre.name.lower())}}'>
-                <img id='genre-images' class='img-fluid shadow-lg bg-white rounded-circle'
+            <a id='genre-links' href='{{url_for("events.view_events", genre=genre.name.lower())}}'>
+                <img id='genre-images' class='img-fluid shadow-lg  bg-white text-white rounded-circle border border-dark m-auto d-block'
                     src="{{url_for('static', filename='images/{0}.png'.format(genre.name|lower))}}">
                 <div class="d-flex justify-content-center">
                     <p>{{genre.name.title()}}</p>
@@ -116,8 +118,8 @@
 <div class='row'>
     {% for city in cities %}
     <div class='col-6 col-xl-4'>
-        <a href='{{url_for("events.view_events_city", city_name=city.name.lower())}}'>
-            <img id='genre-images' class='img-fluid shadow-lg bg-white rounded-circle'
+        <a id='genre-links' href='{{url_for("events.view_events_city", city_name=city.name.lower())}}'>
+            <img id='genre-images' class='img-fluid shadow-lg rounded-circle border border-dark m-auto d-block'
                 src='{{url_for("static", filename="images/{0}.jpg".format(city.name|lower))}}'>
             <div class="d-flex justify-content-center">
                 <p>{{city.name.title()}}</p>
