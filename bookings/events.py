@@ -205,10 +205,10 @@ def check_upload_file(form):
 
 # Function to check if a booking should be allowed to execute
 def check_tickets(form, event):
-    # Form data will be None if alpha is included since the FormField is
-    # IntegerField
+    # Form data will be None if input is not an integer 
+    # since the FormField is IntegerField
     if form.tickets_required.data is None:
-        flash("You must enter only a number!", 'warning')
+        flash("You must enter only a whole number!", 'warning')
         return False
     # If some idiot is trying to book no tickets or negative tickets
     elif form.tickets_required.data <= 0:
