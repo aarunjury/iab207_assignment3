@@ -10,20 +10,18 @@ from flask_wtf.file import FileRequired, FileField, FileAllowed
 
 ALLOWED_FILE = {'PNG', 'JPG', 'JPEG', 'jpeg', 'png', 'jpg'}
 
-# Unlike the built-in Length validator, this will remove whitespace
+# Unlike the built-in Length validator, this will remove whitespace when counting length
 # to prevent users from creating Events with properties that are all or mostly whitespace
-
-
 def check_field_length(form, field):
     field = field.data.strip()
     if len(field) < 5:
-        flash("Your entry was too short! Must be 5 or more characters (not including spaces)", 'warning')
+        #flash("Your entry was too short! Must be 5 or more characters (not including spaces)", 'warning')
         raise ValidationError('Your entry was too short! Must be 5 or more characters (not including spaces)')
 
 
 class EventForm(FlaskForm):
     title = StringField('Event Title', validators=[
-                        InputRequired(message='Your event must have a title'), Length(min=3, max=50, message='Title cannot be more than 40 characters'), check_field_length])
+                        InputRequired(message='Your event must have a title'), Length(min=3, max=50, message='Title must be between 4 and 50 characters'), check_field_length])
     date = DateTimeLocalField('Date and Time', format='%Y-%m-%dT%H:%M', validators=[
         InputRequired(message='Must be in the format: dd/mm/yyyy HH:MM')])
     headliner = StringField('Headlining Artist', validators=[
