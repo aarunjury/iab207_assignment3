@@ -27,6 +27,7 @@ h1 {
 
 .card-body {
   background-color: #fffafa;
+  box-shadow: 0 4px 5px rgb(0 0 0 / 0.5);
 }
 
 .card-header{
