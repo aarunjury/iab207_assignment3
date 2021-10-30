@@ -1,9 +1,11 @@
 {% extends 'base.html' %} {% block content %}
 <br>
 <div id='page-container' class='container'>
+    <!--Carousel section-->
     <div class='row'>
         <h1 class='display-5 fw-bold'>What's on in Brisbane...</h1>
     </div>
+    <!--Creates 3 slides for the carousel-->
     <div class='row'>
         <div id='whats-on-carousel' class='carousel slide' data-bs-ride='carousel'>
             <div class='carousel-indicators'>
@@ -14,6 +16,7 @@
                 <button type='button' data-bs-target='#whats-on-carousel' data-bs-slide-to='2'
                     aria-label='Slide 3'></button>
             </div>
+            <!--Images used on each carousel slide-->
             <div class='carousel-inner'>
                 <div class='carousel-item active'>
                     <a href='#'><img src='{{url_for("static", filename="images/applefest.jpeg")}}'
@@ -28,6 +31,7 @@
                             class='d-block img-fluid w-100' alt='Flume Australian Tour'></a>
                 </div>
             </div>
+            <!--Creates the previous and next buttons on the carousel-->
             <button class='carousel-control-prev' type='button' data-bs-target='#whats-on-carousel'
                 data-bs-slide='prev'>
                 <span class='carousel-control-prev-icon' aria-hidden='true'></span>
@@ -40,6 +44,7 @@
             </button>
         </div>
     </div>
+    <!--End carousel Section-->
     <br>
     <div class='row'>
         <h1 class='display-5 fw-bold'>Search For An Event</h1>
