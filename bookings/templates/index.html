@@ -46,10 +46,12 @@
     </div>
     <!--End carousel Section-->
     <br>
+    <!--Search and selection section-->
     <div class='row'>
         <h1 class='display-5 fw-bold'>Search For An Event</h1>
     </div>
     <form action="{{url_for('main.search')}}" class="row gx-3 gy-2 align-items-center">
+        <!--Create genre dropdown-->
         <div class="col-md-4">
             <select name="genre" class="form-select">
                 <option value='' selected>Select a genre...</option>
@@ -58,6 +60,7 @@
                 {% endfor %}
             </select>
         </div>
+        <!--Create city dropdown-->
         <div class="col-md-4">
             <select name="city" class="form-select">
                 <option value='' selected>Select a city...</option>
@@ -66,14 +69,17 @@
                 {% endfor %}
             </select>
         </div>
+        <!--Create search bar-->
         <div class="col-md-3">
             <input name="search" class="form-control mr-sm-2" type="search" placeholder="Search"
                 aria-label="Search"></input>
         </div>
+        <!--Create submit button-->
         <div class="col-md-1">
             <button type="submit" id='searchbtn' class="btn btn-primary btn-block">Submit</button>
         </div>
     </form>
+    <!--End search section-->
     <br>
     <div class='row'>
         <h1 class='display-5 fw-bold'>Featured Events</h1>
