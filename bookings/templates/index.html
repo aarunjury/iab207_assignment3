@@ -81,9 +81,11 @@
     </form>
     <!--End search section-->
     <br>
+    <!--Featured section-->
     <div class='row'>
         <h1 class='display-5 fw-bold'>Featured Events</h1>
     </div>
+    <!--Create a card for each event-->
     <div class='row'>
         {% for event in current_events %}
         <div class='col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch'>
@@ -105,10 +107,11 @@
         </div>
         {% endfor %}
     </div>
+    <!--End featured section-->
     <br>
     <div class='row'>
         <h1 class='display-5 fw-bold'>Browse by Genre</h1>
-    </div>
+</div>
     <div class='row'>
         {% for genre in genres %}
         <div class='col-6 col-xl-4'>
@@ -123,6 +126,7 @@
     {% endfor %}
 </div>
 <br>
+
 <div class='row'>
     <h1 class='display-5 fw-bold'>Browse by City</h1>
 </div>
