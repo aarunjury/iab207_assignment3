@@ -129,10 +129,11 @@
 </div>
 <!--End genre section-->
 <br>
-
+<!--City section-->
 <div class='row'>
     <h1 class='display-5 fw-bold'>Browse by City</h1>
 </div>
+<!--Create card for each city-->
 <div class='row'>
     {% for city in cities %}
     <div class='col-6 col-xl-4'>
@@ -142,9 +143,10 @@
             <div class="d-flex justify-content-center">
                 <p>{{city.name.title()}}</p>
         </a>
+            </div>
     </div>
+    {% endfor %}
 </div>
-{% endfor %}
-</div>
-<!-- end container -->
+<!--End city section-->
+<!--End container -->
 {% endblock %}
