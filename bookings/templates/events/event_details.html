@@ -55,6 +55,12 @@
                             <h2><strong>{{"$%.2f"|format(event.price)}}</strong> ea.</h2>
                         </div>
                         {% else %}
+                        {% if event.tickets_remaining <= 100 and event.tickets_remaining> 0 %}
+                        <div class='row'>
+                            <p style="color:red"><strong>Hurry, only {{event.tickets_remaining}} tickets
+                                    left!</strong></p>
+                        </div>
+                        {% endif %}
                         <div class='col-6'>
                             <h2><strong>{{"$%.2f"|format(event.price)}}</strong> ea.</h2>
                         </div>
@@ -64,10 +70,6 @@
                                 Book Tickets</button>
                         </div>
                         {% endif %}
-                        {% if event.tickets_remaining <= 100 and event.tickets_remaining> 0 %}
-                            <p style="color:red"><strong>Hurry, only {{event.tickets_remaining}} tickets
-                                    left!</strong></p>
-                            {% endif %}
                     </div>
                     <!-- Modal -->
                     <div class='modal fade' id='bookingModal' tabindex='-1' aria-labelledby='bookingModalLabel'
