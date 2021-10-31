@@ -1,9 +1,11 @@
 {% extends 'base.html' %} {% block content %}
 <br>
 <div id='page-container' class='container'>
+    <!--Carousel section-->
     <div class='row'>
         <h1 class='display-5 fw-bold'>What's on in Brisbane...</h1>
     </div>
+    <!--Creates 3 slides for the carousel-->
     <div class='row'>
         <div id='whats-on-carousel' class='carousel slide' data-bs-ride='carousel'>
             <div class='carousel-indicators'>
@@ -14,6 +16,7 @@
                 <button type='button' data-bs-target='#whats-on-carousel' data-bs-slide-to='2'
                     aria-label='Slide 3'></button>
             </div>
+            <!--Images used on each carousel slide-->
             <div class='carousel-inner'>
                 <div class='carousel-item active'>
                     <a href='#'><img src='{{url_for("static", filename="images/applefest.jpeg")}}'
@@ -28,6 +31,7 @@
                             class='d-block img-fluid w-100' alt='Flume Australian Tour'></a>
                 </div>
             </div>
+            <!--Creates the previous and next buttons on the carousel-->
             <button class='carousel-control-prev' type='button' data-bs-target='#whats-on-carousel'
                 data-bs-slide='prev'>
                 <span class='carousel-control-prev-icon' aria-hidden='true'></span>
@@ -40,11 +44,14 @@
             </button>
         </div>
     </div>
+    <!--End carousel Section-->
     <br>
+    <!--Search and selection section-->
     <div class='row'>
         <h1 class='display-5 fw-bold'>Search For An Event</h1>
     </div>
     <form action="{{url_for('main.search')}}" class="row gx-3 gy-2 align-items-center">
+        <!--Create genre dropdown-->
         <div class="col-md-4">
             <select name="genre" class="form-select">
                 <option value='' selected>Select a genre...</option>
@@ -53,6 +60,7 @@
                 {% endfor %}
             </select>
         </div>
+        <!--Create city dropdown-->
         <div class="col-md-4">
             <select name="city" class="form-select">
                 <option value='' selected>Select a city...</option>
@@ -61,18 +69,23 @@
                 {% endfor %}
             </select>
         </div>
+        <!--Create search bar-->
         <div class="col-md-3">
             <input name="search" class="form-control mr-sm-2" type="search" placeholder="Search"
                 aria-label="Search"></input>
         </div>
+        <!--Create submit button-->
         <div class="col-md-1">
             <button type="submit" id='searchbtn' class="btn btn-primary btn-block">Submit</button>
         </div>
     </form>
+    <!--End search section-->
     <br>
+    <!--Featured section-->
     <div class='row'>
         <h1 class='display-5 fw-bold'>Featured Events</h1>
     </div>
+    <!--Create a card for each event-->
     <div class='row'>
         {% for event in current_events %}
         <div class='col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch'>
@@ -94,10 +107,13 @@
         </div>
         {% endfor %}
     </div>
+    <!--End featured section-->
     <br>
+    <!--Genre section-->
     <div class='row'>
         <h1 class='display-5 fw-bold'>Browse by Genre</h1>
     </div>
+    <!--Create card for each genre-->
     <div class='row'>
         {% for genre in genres %}
         <div class='col-6 col-xl-4'>
@@ -111,10 +127,13 @@
     </div>
     {% endfor %}
 </div>
+<!--End genre section-->
 <br>
+<!--City section-->
 <div class='row'>
     <h1 class='display-5 fw-bold'>Browse by City</h1>
 </div>
+<!--Create card for each city-->
 <div class='row'>
     {% for city in cities %}
     <div class='col-6 col-xl-4'>
@@ -124,9 +143,10 @@
             <div class="d-flex justify-content-center">
                 <p>{{city.name.title()}}</p>
         </a>
+            </div>
     </div>
+    {% endfor %}
 </div>
-{% endfor %}
-</div>
-<!-- end container -->
+<!--End city section-->
+<!--End container -->
 {% endblock %}

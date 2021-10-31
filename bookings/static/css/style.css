@@ -16,6 +16,8 @@ h1 {
   border-left: 10px solid #96858f;
   padding-left: 10px;
   margin-bottom: 30px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 5px rgb(0 0 0 / 0.5);
 }
 
 .card-img-top {
@@ -25,6 +27,7 @@ h1 {
 
 .card-body {
   background-color: #fffafa;
+  box-shadow: 0 4px 5px rgb(0 0 0 / 0.5);
 }
 
 .card-header{
