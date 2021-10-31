@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% import "bootstrap/wtf.html" as wtf %}
 {% block content %}
-<br>
 <div id='page-container' class='container'>
     <div class='row'>
         <div class='col-sm-12 col-md-6'>
@@ -21,7 +20,6 @@
             {% endfor %}
         </div>
     </div>
-    <br>
     <div class='row'>
         <div class='col'>
             <div class='card'>
@@ -61,7 +59,7 @@
                             <h2><strong>{{"$%.2f"|format(event.price)}}</strong> ea.</h2>
                         </div>
                         <div class='col-6'>
-                            <button id='book-button' type='button' class='btn btn-dark' data-bs-toggle='modal'
+                            <button id='book-button' type='button' class='btn btn-dark float-end' data-bs-toggle='modal'
                                 data-bs-target='#bookingModal'>
                                 Book Tickets</button>
                         </div>
@@ -128,7 +126,8 @@
                 <b>{{comment.user.name}}</b>
             </div>
             <div class='row'>
-                <span class="ml-2 text-muted">{{comment.created_at.strftime('%d/%m/%y %#I:%M
+                <span class="ml-2">
+                    {{comment.created_at.strftime('%d/%m/%y %#I:%M
                     %p')}}</span>
             </div>
         </div>
@@ -137,6 +136,5 @@
         </div>
     </div>
     {% endfor %}
-
 </div><!-- end container -->
 {% endblock %}
