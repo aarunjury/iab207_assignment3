@@ -51,7 +51,7 @@ h1 {
   background-color: #6d7993;
   border-color: #000000;
   color: #fffafa;
-  margin-top: 0.5rem;
+  margin-top: 0.25rem;
   background-color: #96858f;
 }
 
@@ -115,7 +115,9 @@ h1 {
   color:#000000;
 }
 
-#hero-image {
-  max-height: 100vh;
+#history-image{
+  max-height: 240px;
+  object-fit: cover;
+  background-size: cover;
+  background-position: center center;
 }
-
