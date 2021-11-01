@@ -10,6 +10,7 @@
             </figure>
         </div>
         <div class='col-sm-12 col-md-6'>
+            <div class='info_box'>
             <h4><strong>Upcoming Events by This Artist:</strong></h4>
             {% for artist_event in artist_events %}
             <p><strong><a href='{{url_for("events.show", id=artist_event.id)}}'>{{artist_event.title}}</strong></a></p>
@@ -18,6 +19,7 @@
             <p>{{artist_event.venue}}, <strong>{{artist_event.event_city.name.title()}}</strong></p>
             <hr>
             {% endfor %}
+            </div>
         </div>
     </div>
     <div class='row'>
