@@ -21,7 +21,7 @@
 </head>
 
 <body>
-
+    <!--Navigation bar-->
     <header>
         <nav class='navbar navbar-expand-lg navbar-dark'>
             <div class='container'>
@@ -38,6 +38,7 @@
                             <a class='nav-link dropdown-toggle' href='#' id='navbarDropdown' role='button'
                                 data-bs-toggle='dropdown' aria-expanded='false'>City</a>
                             <ul class='dropdown-menu dropdown-menu-dark' aria-labelledby='navbarDropdown'>
+                                <!--For each city, create an option in the dropdown menu-->
                                 {% for city in cities %}
                                 <li><a class='dropdown-item'
                                         href='{{url_for("events.view_events_city", city_name=city.name.lower())}}'>{{city.name.title()}}</a>
@@ -54,6 +55,7 @@
                                 Genre
                             </a>
                             <ul class='dropdown-menu dropdown-menu-dark' aria-labelledby='navbarDropdown'>
+                                <!--For each genre, create an option in the dropdown menu-->
                                 {% for genre in genres %}
                                 <li><a class='dropdown-item'
                                         href='{{url_for("events.view_events", genre=genre.name.lower())}}'>{{genre.name.title()}}</a>
@@ -72,6 +74,7 @@
                                 Artist
                             </a>
                             <ul class='dropdown-menu dropdown-menu-dark' aria-labelledby='navbarDropdown'>
+                                <!--For each artist, create and option in the dropdown menu-->
                                 {% for artist in artist_list %}
                                 <li><a class='dropdown-item'
                                         href='{{url_for("events.view_events_artist", headliner=artist.headliner)}}'>{{artist.headliner}}</a>
@@ -123,7 +126,7 @@
             </div>
         </nav>
     </header>
-
+    <!--End Navigation bar-->
     <main>
         <br>
         {% with messages = get_flashed_messages(with_categories=true) %}
