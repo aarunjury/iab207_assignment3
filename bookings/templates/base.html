@@ -130,6 +130,8 @@
     </header>
     <!--End Navigation bar-->
     <main>
+        <!--Creates error/warning banners-->
+        <!--e.g. "You can only edit your own events!"-->
         <br>
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -145,13 +147,14 @@
         {% block content %}
         {% endblock %}
     </main>
-
+    <!--Footer with social media and business information-->
     <footer>
         <div class="container">
             <div id="footer">
                 <div class="container footer navbar-fixed-bottom">
                     <div class='row'>
                         <div class='col border-bottom'>
+                            <!--Creates line with social media tags-->
                             <p>
                                 Connect with us
                                 <a target="" title="Facebook">
@@ -172,6 +175,7 @@
                                 </a>
                             </p>
                         </div>
+                        <!--Creates line with business information-->
                         <div class='row'>
                             <p><a href='mailto:info@ticketsmarter.com.au'>info@ticketsmarter.com.au</a> | <a
                                     href='tel:18008425387'>1800TICKETS</a> | &copy; 2021 TicketSmarter Pty Ltd (ABN 92
