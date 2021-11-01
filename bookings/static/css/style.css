@@ -30,6 +30,7 @@ h1 {
   box-shadow: 0 4px 5px rgb(0 0 0 / 0.5);
 }
 
+/*Defining Card Details*/
 .card-img-top {
   height: 200px;
   object-fit: cover;
@@ -38,6 +39,20 @@ h1 {
 .card-body {
   background-color: #fffafa;
   box-shadow: 0 4px 5px rgb(0 0 0 / 0.5);
+}
+
+.card-title{
+  width: 100%;
+  text-align: center;
+}
+
+.card-title a{
+  color: #000;
+  text-decoration: none;
+}
+
+.card-title a:hover{
+  color: #6d7993;
 }
 
 .card-header{
