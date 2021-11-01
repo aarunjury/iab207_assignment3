@@ -1,8 +1,10 @@
+/*Setting Web page font*/
 html,
 body {
   font-family: "Quicksand", sans-serif;
 }
 
+/*Setting basic Web Page Layouts*/
 body {
   background-image: url("/static/images/bkgnd.png");
 }
@@ -11,12 +13,13 @@ main {
   padding-bottom: 40px;
 }
 
+/*Seting h1 details*/
 h1 {
   font-weight: 900;
   border-left: 10px solid #96858f;
   padding-left: 10px;
   margin-bottom: 30px;
-  background-color: #ffffff;
+  background-color: rgba(255 255 255 / 0.5);
   box-shadow: 0 4px 5px rgb(0 0 0 / 0.5);
 }
 
