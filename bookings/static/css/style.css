@@ -92,6 +92,7 @@ h1 {
   display: block;
 }
 
+/*Designing navigation bar*/
 .navbar {
   background-color: #6d7993;
   color: #000000;
@@ -135,14 +136,19 @@ h1 {
   min-height: 70vh;
 }
 
+/*Desiging Genre and Cities*/
 #genre-images {
   max-height: 200px;
 }
 
 #genre-links{
   color:#000000;
+  text-decoration: none;
+  font-size: 1.5em;
+  font-weight: 1000;
 }
 
+/*Setting history Images*/
 #history-image{
   max-height: 240px;
   object-fit: cover;
