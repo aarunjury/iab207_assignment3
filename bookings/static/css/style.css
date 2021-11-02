@@ -54,6 +54,15 @@ h1 {
   text-align: center;
 }
 
+.card-title a{
+  color: #000;
+  text-decoration: none;
+}
+
+.card-title a{
+ color: #6d7993; 
+}
+
 .card-header{
   color:#fffafa;
 }
