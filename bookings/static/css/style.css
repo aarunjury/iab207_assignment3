@@ -73,19 +73,25 @@ h1 {
 .card-header, #card-header{
   color:#fffafa;
 }
+.card-text{
+  color: #fff;
+}
 
 .border-dark{
   background-color: #6d7993;
 }
 
+/*styling the figure caption below artist images on their page */
 .figure-caption {
   color: #000000;
 }
 
+/*styling navigation*/
 .dropdown-menu-dark .dropdown-item {
   color: #fffafa;
 }
 
+/*styling card buttons*/
 .btn {
   background-color: #6d7993;
   border-color: #000000;
