@@ -29,6 +29,14 @@ h1 {
   padding-left: 20px;
 }
 
+.info_box a{
+  text-decoration: none;
+  color: #000;
+}
+
+.info_box a:hover{
+  color: #6d7993;
+}
 
 /*Defining Card Details on artist page*/
 .card-img-top {
