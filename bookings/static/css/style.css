@@ -69,26 +69,27 @@ h1 {
   box-shadow: none;
 }
 
-.card-header{
+/*Styling for view_events.html*/
+.card-header, #card-header{
   color:#fffafa;
 }
 
-#card-header{
-  color: #fffafa;
-}
 
 .border-dark{
   background-color: #6d7993;
 }
 
+/*styling the figure caption below artist images on their page */
 .figure-caption {
   color: #000000;
 }
 
+/*styling navigation*/
 .dropdown-menu-dark .dropdown-item {
   color: #fffafa;
 }
 
+/*styling card buttons*/
 .btn {
   background-color: #6d7993;
   border-color: #000000;

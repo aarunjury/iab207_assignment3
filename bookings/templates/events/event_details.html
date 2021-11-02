@@ -50,6 +50,7 @@
                             <p class='card-text'>{{event.description}}</p>
                         </div>
                     </div>
+                    <!-- Create Ticket Boundary in terms of ticket availability -->
                     <div class='row'>
                         {% if event.tickets_remaining == 0 %}
                         <div class='col-6'>
@@ -139,6 +140,7 @@
                     %p')}}</span>
             </div>
         </div>
+        <!--This shows pervious comments -->
         <div class='col-sm-12 col-md-9 col-lg-10 mt-auto'>
             {{comment.text}}
         </div>

@@ -3,6 +3,7 @@
 <!-- My Bookings -->
 {% if heading == 'My Bookings' %}
 <br>
+<!-- Shows current bookings as a list -->
 <div id='page-container' class="container">
     <div class='row'>
         <h1>{{heading}}</h1>
@@ -17,6 +18,7 @@
     </div>
     {% for booking in bookings %}
     <br>
+    <!-- Displays all the details about the booked event -->
     <div class='row border-bottom'>
         <div class='col-sm-12 col-md-6 col-lg-8'>
             <div class="card border-dark mb-3">
@@ -50,6 +52,7 @@
 </div> <!-- end container -->
         {% else %}
         <!-- My Events -->
+        <!-- An opportunity to add and edit events that has been booked -->
         <br>
         <div id='page-container' class="container">
             <div class='row'>
@@ -66,6 +69,7 @@
             </div>
             {% for event in events %}
             <br>
+            <!--Show events details to be booked -->
             <div class='row border-bottom'>
                 <div class='col-sm-12 col-md-6 col-lg-8'>
                     <div class="card border-dark mb-3">
@@ -89,6 +93,7 @@
                                     </p>
                                 </div>
                             </div>
+                        <!-- Allow to edit the events details that is already displayed -->
                             <div class='row'>
                                 <div class='col-12'>
                                     <a href='{{url_for("events.update_event", id=event.id)}}'
@@ -101,7 +106,7 @@
                             </div>
                             <div class='row'>
                                 <div class='col-md-6 col-xl-3'>
-                                    <!-- Modal -->
+                                    <!-- Modal (Confirmation of deletion of event)-->
                                     <div class='modal fade' id='delete-event-{{event.id}}' tabindex='-1'
                                         aria-labelledby='delete-event-{{event.id}}' aria-hidden='true'>
                                         <div class='modal-dialog'>
