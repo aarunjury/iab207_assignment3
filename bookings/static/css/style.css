@@ -29,15 +29,6 @@ h1 {
   padding-left: 20px;
 }
 
-.info_box a{
-  text-decoration: none;
-  color: #000;
-  font-size: 1.25em;
-}
-
-.info_box a:hover{
-  color: rgba(0 0 0 / 0.5);
-}
 
 /*Defining Card Details on artist page*/
 .card-img-top {
@@ -53,15 +44,6 @@ h1 {
 .card-title{
   width: 100%;
   text-align: center;
-}
-
-.card-title a{
-  color: #000;
-  text-decoration: none;
-}
-
-.card-title a:hover{
-  color: #6d7993;
 }
 
 .card-header{
