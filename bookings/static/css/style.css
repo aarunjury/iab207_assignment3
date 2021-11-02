@@ -66,6 +66,7 @@ h1 {
 /*Card title specific for events*/
 .card-event-title{
   background-color: none;
+  box-shadow: none;
 }
 
 .card-header{
