@@ -35,14 +35,17 @@ h1 {
   font-size: 1.25em;
 }
 
-/*Defining Card Details*/
+.info_box a:hover{
+  color: rgba(0 0 0 / 0.5);
+
+/*Defining Card Details on artist page*/
 .card-img-top {
   height: 200px;
   object-fit: cover;
   }
 
 .card-body {
-  background-color: #fffafa;
+  background-color: rgba(255 255 255 / 0.5);
   box-shadow: 0 4px 5px rgb(0 0 0 / 0.5);
 }
 
