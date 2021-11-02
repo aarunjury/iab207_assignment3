@@ -49,6 +49,7 @@ h1 {
   box-shadow: 0 4px 5px rgb(0 0 0 / 0.5);
 }
 
+/*Card title specific to home page*/
 .card-title{
   width: 100%;
   text-align: center;
@@ -61,6 +62,10 @@ h1 {
 
 .card-title a:hover{
  color: #6d7993; 
+}
+/*Card title specific for events*/
+.card-event-title{
+  background-color: none;
 }
 
 .card-header{
