@@ -69,12 +69,9 @@ h1 {
   box-shadow: none;
 }
 
-.card-header{
+/*Styling for view_events.html*/
+.card-header, #card-header{
   color:#fffafa;
-}
-
-#card-header{
-  color: #fffafa;
 }
 
 .border-dark{
