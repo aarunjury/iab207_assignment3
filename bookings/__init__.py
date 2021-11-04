@@ -19,7 +19,7 @@ def create_app():
         uri = uri.replace("postgres://", "postgresql://", 1)
     # rest of connection code using the connection string `uri`
     #SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL').replace("://", "ql://", 1)
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+    app.config['SQLALCHEMY_DATABASE_URI'] = uri
     #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ticketsmarter.sqlite'
     app.config['UPLOAD_FOLDER'] = 'static/images/'
     db.init_app(app)
