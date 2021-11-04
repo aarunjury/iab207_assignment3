@@ -14,13 +14,13 @@ def create_app():
     app = Flask(__name__)
     bootstrap = Bootstrap(app)
     app.secret_key = "1234567890"
-    uri = os.getenv("DATABASE_URL")  # or other relevant config var
-    if uri.startswith("postgres://"):
-        uri = uri.replace("postgres://", "postgresql://", 1)
+    # uri = os.getenv("DATABASE_URL")  # or other relevant config var
+    # if uri.startswith("postgres://"):
+    #     uri = uri.replace("postgres://", "postgresql://", 1)
     # rest of connection code using the connection string `uri`
     #SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL').replace("://", "ql://", 1)
-    app.config['SQLALCHEMY_DATABASE_URI'] = uri
-    #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ticketsmarter.sqlite'
+    #app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ticketsmarter.sqlite'
     app.config['UPLOAD_FOLDER'] = 'static/images/'
     db.init_app(app)
     login_manager = LoginManager()
