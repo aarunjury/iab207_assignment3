@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% import "bootstrap/wtf.html" as wtf %}
+{% import "bootstrap5/form.html" as wtf %}
 {% block content %}
 
 <!-- Display page-header -->
@@ -14,7 +14,7 @@
     </div>
 
     <div class="col-md-6 ml-5">
-        {{wtf.quick_form(form)}}
+        {{wtf.render_form(form)}}
     </div>
 
     <!-- When you have login form, then show the user a link to register -->

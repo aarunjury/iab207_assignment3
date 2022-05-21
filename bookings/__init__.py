@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 from flask import Flask, render_template
-from flask_bootstrap import Bootstrap
+from flask_bootstrap import Bootstrap5
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, current_user
 from sqlalchemy.sql.expression import false
@@ -12,7 +12,7 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 def create_app():
     app = Flask(__name__)
-    bootstrap = Bootstrap(app)
+    bootstrap = Bootstrap5(app)
     app.secret_key = "1234567890"
     # uri = os.getenv("DATABASE_URL")  # or other relevant config var
     # if uri.startswith("postgres://"):
