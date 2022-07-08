@@ -17,7 +17,7 @@
                 {% for artist_event in artist_events %}
                 <p><strong><a href='{{url_for("events.show", id=artist_event.id)}}'>{{artist_event.title}}</strong></a>
                 </p>
-                <p>{{artist_event.date.strftime('%B %d, %Y @ %#I:%M
+                <p>{{artist_event.date.strftime('%B %d, %Y @ %I:%M
                     %p')}}</p>
                 <p>{{artist_event.venue}}, <strong>{{artist_event.event_city.name.title()}}</strong></p>
                 <hr>
@@ -34,7 +34,7 @@
                     <div class='row'>
                         <h1 class='card-event-title'>{{event.title}}</h1>
                         <div class='col-xs-12 col-md-6'>
-                            <h3>{{event.date.strftime('%B %d, %Y @ %#I:%M
+                            <h3>{{event.date.strftime('%B %d, %Y @ %-I:%M
                                 %p')}} - <strong>{{event.event_status.name.title()}}</strong></h3>
                             <div class='row'>
                                 <h4>{{event.venue}}, {{event.event_city.name.title()}}</h4>
@@ -99,7 +99,7 @@
                                         that can be worn
                                         as a backpack. All other bags must be smaller than A5.</p>
                                     <strong>Date:</strong>
-                                    <p>{{event.date.strftime('%B %d, %Y @ %#I:%M
+                                    <p>{{event.date.strftime('%B %d, %Y @ %I:%M
                                         %p')}}</p>
                                     <strong>Venue:</strong>
                                     <p>{{event.venue}}</p>
@@ -137,7 +137,7 @@
             </div>
             <div class='row'>
                 <span class="ml-2">
-                    {{comment.created_at.strftime('%d/%m/%y %#I:%M
+                    {{comment.created_at.strftime('%d/%m/%y %I:%M
                     %p')}}</span>
             </div>
         </div>

@@ -1,26 +1,16 @@
-import os
 from datetime import datetime
 from flask import Flask, render_template
 from flask_bootstrap import Bootstrap5
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, current_user
-from sqlalchemy.sql.expression import false
 from werkzeug.exceptions import HTTPException
 
 db = SQLAlchemy()
-SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 def create_app():
     app = Flask(__name__)
     bootstrap = Bootstrap5(app)
     app.secret_key = "1234567890"
-    # uri = os.getenv("DATABASE_URL")  # or other relevant config var
-    # if uri.startswith("postgres://"):
-    #     uri = uri.replace("postgres://", "postgresql://", 1)
-    # # rest of connection code using the connection string `uri`
-    # #SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL').replace("://", "ql://", 1)
-    # app.config['SQLALCHEMY_DATABASE_URI'] = uri
-    # #app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ticketsmarter.sqlite'
     app.config['UPLOAD_FOLDER'] = 'static/images/'
     db.init_app(app)

@@ -30,11 +30,11 @@
                         <div class='col'>
                             <h3 class="card-title"><strong>{{booking.booked_event.headliner}}</strong></h3>
                             <p class="card-text">
-                            <h3><strong>{{booking.booked_event.date.strftime('%B %d, %Y @ %#I:%M
+                            <h3><strong>{{booking.booked_event.date.strftime('%B %d, %Y @ %I:%M
                                     %p')}}</strong></h3>
                             <h3>{{booking.booked_event.venue}}, {{booking.booked_event.event_city.name.title()}}</h3>
                             <h6><strong>Booking ID: </strong>{{booking.id}} <strong>Booked On:
-                                </strong>{{booking.booked_on.strftime('%d/%m/%Y @ %#I:%M %p')}}</h6>
+                                </strong>{{booking.booked_on.strftime('%d/%m/%Y @ %I:%M %p')}}</h6>
                             <h6><strong>Tickets Booked: </strong>{{booking.tickets_booked}} <strong>Total Cost:
                                 </strong>{{"$%.2f"|format(booking.tickets_booked*booking.event.price)}}</h6>
                             </p>

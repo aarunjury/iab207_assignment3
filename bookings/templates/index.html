@@ -134,7 +134,7 @@
     <h1 class='display-5 fw-bold'>Browse by City</h1>
 </div>
 <!--Create card for each city-->
-<div class='row'>
+<div class='row justify-content-center'>
     {% for city in cities %}
     <div class='col-6 col-xl-4'>
         <a id='genre-links' href='{{url_for("events.view_events_city", city_name=city.name.lower())}}'>
