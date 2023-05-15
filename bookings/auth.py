@@ -3,7 +3,7 @@ from .forms import LoginForm, RegisterForm
 from .models import User
 from . import db
 from flask_login import login_required, logout_user, login_user, current_user
-from werkzeug.security import generate_password_hash, check_password_hash
+from flask_bcrypt import generate_password_hash, check_password_hash
 
 authbp = Blueprint('auth', __name__)
 

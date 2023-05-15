@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% import "bootstrap5/form.html" as wtf %}
+{% from "bootstrap5/form.html" import render_form %}
 {% block content %}
 
 <!-- Setting up the upcoming concerts for the artist-->
@@ -7,19 +7,19 @@
     <div class='row'>
         <div class='col-sm-12 col-md-6'>
             <figure class="figure">
-                <img src='{{event.image}}' id='hero-image' class='mx-auto d-block img-fluid shadow-lg p-1 mb-2' alt=''>
-                <figcaption class="figure-caption">{{event.headliner}}</figcaption>
+                <img src='{{ event.image }}' id='hero-image' class='mx-auto d-block img-fluid shadow-lg p-1 mb-2' alt=''>
+                <figcaption class="figure-caption">{{ event.headliner }}</figcaption>
             </figure>
         </div>
         <div class='col-sm-12 col-md-6'>
             <h2><strong>Upcoming Events by This Artist:</strong></h2>
             <div class='info_box'>
                 {% for artist_event in artist_events %}
-                <p><strong><a href='{{url_for("events.show", id=artist_event.id)}}'>{{artist_event.title}}</strong></a>
+                <p><strong><a href='{{ url_for("events.show", id=artist_event.id) }}'>{{ artist_event.title }}</strong></a>
                 </p>
-                <p>{{artist_event.date.strftime('%B %d, %Y @ %I:%M
-                    %p')}}</p>
-                <p>{{artist_event.venue}}, <strong>{{artist_event.event_city.name.title()}}</strong></p>
+                <p>{{ artist_event.date.strftime('%B %d, %Y @ %I:%M
+                    %p') }}</p>
+                <p>{{ artist_event.venue }}, <strong>{{ artist_event.event_city.name.title() }}</strong></p>
                 <hr>
                 {% endfor %}
             </div>
@@ -32,45 +32,45 @@
             <div class='card'>
                 <div class='card-body'>
                     <div class='row'>
-                        <h1 class='card-event-title'>{{event.title}}</h1>
+                        <h1 class='card-event-title'>{{ event.title }}</h1>
                         <div class='col-xs-12 col-md-6'>
-                            <h3>{{event.date.strftime('%B %d, %Y @ %-I:%M
-                                %p')}} - <strong>{{event.event_status.name.title()}}</strong></h3>
+                            <h3>{{ event.date.strftime('%B %d, %Y @ %-I:%M
+                                %p') }} - <strong>{{ event.event_status.name.title() }}</strong></h3>
                             <div class='row'>
-                                <h4>{{event.venue}}, {{event.event_city.name.title()}}</h4>
+                                <h4>{{ event.venue }}, {{ event.event_city.name.title() }}</h4>
                             </div>
                             <div class='row'>
                                 <div class='col-xs-12'>
-                                    <h6><strong>Genre: </strong>{{event.event_genre.name.title()}}</h6>
-                                    <h6><strong>Created On: </strong>{{event.created_on.strftime('%d/%m/%Y')}}</h6>
+                                    <h6><strong>Genre: </strong>{{ event.event_genre.name.title() }}</h6>
+                                    <h6><strong>Created On: </strong>{{ event.created_on.strftime('%d/%m/%Y') }}</h6>
                                 </div>
                             </div>
                         </div>
                         <div class='col-xs-12 col-md-6'>
                             <h4><strong>Event Description:</strong></h4>
-                            <p class='card-text'>{{event.description}}</p>
+                            <p class='card-text'>{{ event.description }}</p>
                         </div>
                     </div>
                     <!-- Create Ticket Boundary in terms of ticket availability -->
                     <div class='row'>
                         {% if event.tickets_remaining == 0 %}
                         <div class='col-6'>
-                            <h2><strong>{{"$%.2f"|format(event.price)}}</strong> ea.</h2>
+                            <h2><strong>{{ "$%.2f"|format(event.price) }}</strong> ea.</h2>
                             <p style="color:red"><strong>Sorry, sold out!</strong></p>
                         </div>
                         {% elif event.event_status.name == 'INACTIVE' or event.event_status.name == 'CANCELLED' %}
                         <div class='col-6'>
-                            <h2><strong>{{"$%.2f"|format(event.price)}}</strong> ea.</h2>
+                            <h2><strong>{{ "$%.2f"|format(event.price) }}</strong> ea.</h2>
                         </div>
                         {% else %}
                         {% if event.tickets_remaining <= 100 and event.tickets_remaining> 0 %}
                             <div class='row'>
-                                <p style="color:red"><strong>Hurry, only {{event.tickets_remaining}} tickets
+                                <p style="color:red"><strong>Hurry, only {{ event.tickets_remaining }} tickets
                                         left!</strong></p>
                             </div>
                             {% endif %}
                             <div class='col-6'>
-                                <h2><strong>{{"$%.2f"|format(event.price)}}</strong> ea.</h2>
+                                <h2><strong>{{ "$%.2f"|format(event.price) }}</strong> ea.</h2>
                             </div>
                             <div class='col-6'>
                                 <button id='book-button' type='button' class='btn btn-dark float-end'
@@ -85,29 +85,29 @@
                         <div class='modal-dialog'>
                             <div class='modal-content'>
                                 <div class='modal-header'>
-                                    <h5 class='modal-title' id='bookingModalLabel'>{{event.title}}</h5>
+                                    <h5 class='modal-title' id='bookingModalLabel'>{{ event.title }}</h5>
                                     <button type='button' class='btn-close' data-bs-dismiss='modal'
                                         aria-label='Close'></button>
                                 </div>
                                 <div class='modal-body'>
                                     <strong>Important Info:</strong>
-                                    <p><strong>{{event.venue}}</strong> Bag Restrictions: Please note backpacks
+                                    <p><strong>{{ event.venue }}</strong> Bag Restrictions: Please note backpacks
                                         of
                                         any type and size
-                                        are not permitted into <strong>{{event.venue}}</strong>, including
+                                        are not permitted into <strong>{{ event.venue }}</strong>, including
                                         handbags
                                         that can be worn
                                         as a backpack. All other bags must be smaller than A5.</p>
                                     <strong>Date:</strong>
-                                    <p>{{event.date.strftime('%B %d, %Y @ %I:%M
-                                        %p')}}</p>
+                                    <p>{{ event.date.strftime('%B %d, %Y @ %I:%M
+                                        %p') }}</p>
                                     <strong>Venue:</strong>
                                     <p>{{event.venue}}</p>
                                     <strong>Event Status:</strong>
                                     <p>{{event.event_status.name.title()}}</p>
                                     <strong>Cost per ticket:</strong>
-                                    <p>{{"$%.2f"|format(event.price)}}</p>
-                                    {{wtf.render_form(booking_form, "/events/{0}/book".format(event.id))}}
+                                    <p>{{ "$%.2f"|format(event.price) }}</p>
+                                    {{ render_form(booking_form, "/events/{0}/book".format(event.id)) }}
                                 </div>
                             </div>
                         </div>
@@ -125,7 +125,7 @@
     </div>
     <div class='row'>
         <div class="col">
-            {{wtf.render_form(form,"/events/{0}/comment".format(event.id))}}
+            {{ render_form(form,"/events/{0}/comment".format(event.id)) }}
         </div>
     </div>
     <br>
@@ -133,17 +133,17 @@
     <div class='row border-bottom'>
         <div class='col-sm-12 col-md-3 col-lg-2'>
             <div class='row'>
-                <b>{{comment.user.name}}</b>
+                <b>{{ comment.user.name }}</b>
             </div>
             <div class='row'>
                 <span class="ml-2">
-                    {{comment.created_at.strftime('%d/%m/%y %I:%M
-                    %p')}}</span>
+                    {{ comment.created_at.strftime('%d/%m/%y %I:%M
+                    %p') }}</span>
             </div>
         </div>
         <!--This shows pervious comments -->
         <div class='col-sm-12 col-md-9 col-lg-10 mt-auto'>
-            {{comment.text}}
+            {{ comment.text }}
         </div>
     </div>
     {% endfor %}

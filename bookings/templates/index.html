@@ -1,4 +1,5 @@
-{% extends 'base.html' %} {% block content %}
+{% extends 'base.html' %}
+{% block content %}
 <br>
 <div id='page-container' class='container'>
     <!--Carousel section-->
@@ -19,15 +20,15 @@
             <!--Images used on each carousel slide-->
             <div class='carousel-inner'>
                 <div class='carousel-item active'>
-                    <a href='#'><img src='{{url_for("static", filename="images/applefest.jpeg")}}'
+                    <a href='#'><img src='{{ url_for("static", filename="images/applefest.jpeg") }}'
                             class='d-block img-fluid w-100' alt='Apple Music Festival'></a>
                 </div>
                 <div class='carousel-item'>
-                    <a href='#'><img src='{{url_for("static", filename="images/live.jpg")}}'
+                    <a href='#'><img src='{{ url_for("static", filename="images/live.jpg") }}'
                             class='d-block img-fluid w-100' alt='Paramore Live in Concert'></a>
                 </div>
                 <div class='carousel-item'>
-                    <a href='#'><img src='{{url_for("static", filename="images/flume.jpg")}}'
+                    <a href='#'><img src='{{ url_for("static", filename="images/flume.jpg") }}'
                             class='d-block img-fluid w-100' alt='Flume Australian Tour'></a>
                 </div>
             </div>
@@ -50,7 +51,7 @@
     <div class='row'>
         <h1 class='display-5 fw-bold'>Search For An Event</h1>
     </div>
-    <form action="{{url_for('main.search')}}" class="row gx-3 gy-2 align-items-center">
+    <form action="{{ url_for('main.search') }}" class="row gx-3 gy-2 align-items-center">
         <!--Create genre dropdown-->
         <div class="col-md-4">
             <select name="genre" class="form-select">
@@ -65,7 +66,7 @@
             <select name="city" class="form-select">
                 <option value='' selected>Select a city...</option>
                 {% for city in cities %}
-                <option value="{{city.name.lower()}}">{{city.name.title()}}</option>
+                <option value="{{ city.name.lower() }}">{{ city.name.title() }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -90,17 +91,17 @@
         {% for event in current_events %}
         <div class='col-12 col-sm-6 col-md-4 col-lg-3 d-flex align-items-stretch'>
             <div class='card mt-4'>
-                <img src="{{event.image}}" class='card-img-top img-fluid' alt=''>
+                <img src="{{ event.image }}" class='card-img-top img-fluid' alt=''>
                 <div class='card-body d-flex flex-column'>
-                    <h4 class='card-title'><a href='{{url_for("events.show", id=event.id)}}'>{{event.title}}</a></h4>
+                    <h4 class='card-title'><a href='{{ url_for("events.show", id=event.id) }}'>{{ event.title }}</a></h4>
                     {% if event.tickets_remaining == 0 %}
-                    <h5 class='card-subtitle mb-2' style="color:red">{{event.event_status.name.title()}}</h5>
+                    <h5 class='card-subtitle mb-2' style="color:red">{{ event.event_status.name.title() }}</h5>
                     <h6 class='card-subtitle mb-2'>{{event.event_genre.name.title()}}</h6>
                     {% else %}
-                    <h5 class='card-subtitle mb-2' style="color:green">{{event.event_status.name.title()}}</h5>
-                    <h6 class='card-subtitle mb-2'>{{event.event_genre.name.title()}}</h6>
+                    <h5 class='card-subtitle mb-2' style="color:green">{{ event.event_status.name.title() }}</h5>
+                    <h6 class='card-subtitle mb-2'>{{ event.event_genre.name.title() }}</h6>
                     {% endif %}
-                    <p id='index-cards' class='card-text'>{{event.description}}</p>
+                    <p id='index-cards' class='card-text'>{{ event.description }}</p>
                     <a href='{{url_for("events.show", id=event.id)}}' class='mt-auto btn btn-outline-dark'>See more</a>
                 </div>
             </div>
@@ -117,9 +118,9 @@
     <div class='row'>
         {% for genre in genres %}
         <div class='col-6 col-xl-4'>
-            <a id='genre-links' href='{{url_for("events.view_events", genre=genre.name.lower())}}'>
+            <a id='genre-links' href='{{ url_for("events.view_events", genre=genre.name.lower()) }}'>
                 <img id='genre-images' class='img-fluid shadow-lg  bg-white text-white rounded-circle border border-dark m-auto d-block'
-                    src="{{url_for('static', filename='images/{0}.png'.format(genre.name|lower))}}">
+                    src="{{ url_for('static', filename='images/{0}.png'.format(genre.name|lower)) }}">
                 <div class="d-flex justify-content-center">
                     <p>{{genre.name.title()}}</p>
             </a>
@@ -137,11 +138,11 @@
 <div class='row justify-content-center'>
     {% for city in cities %}
     <div class='col-6 col-xl-4'>
-        <a id='genre-links' href='{{url_for("events.view_events_city", city_name=city.name.lower())}}'>
+        <a id='genre-links' href='{{ url_for("events.view_events_city", city_name=city.name.lower()) }}'>
             <img id='genre-images' class='img-fluid shadow-lg rounded-circle border border-dark m-auto d-block'
-                src='{{url_for("static", filename="images/{0}.jpg".format(city.name|lower))}}'>
+                src='{{ url_for("static", filename="images/{0}.jpg".format(city.name|lower)) }}'>
             <div class="d-flex justify-content-center">
-                <p>{{city.name.title()}}</p>
+                <p>{{ city.name.title() }}</p>
         </a>
             </div>
     </div>

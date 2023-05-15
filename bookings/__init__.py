@@ -3,6 +3,7 @@ from flask import Flask, render_template
 from flask_bootstrap import Bootstrap5
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, current_user
+from flask_bcrypt import Bcrypt
 from werkzeug.exceptions import HTTPException
 
 db = SQLAlchemy()
@@ -10,6 +11,7 @@ db = SQLAlchemy()
 def create_app():
     app = Flask(__name__)
     bootstrap = Bootstrap5(app)
+    bcrypt = Bcrypt(app)
     app.secret_key = "1234567890"
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ticketsmarter.sqlite'
     app.config['UPLOAD_FOLDER'] = 'static/images/'

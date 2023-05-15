@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% import "bootstrap5/form.html" as wtf %}
+{% from "bootstrap5/form.html" import render_form %}
 {% block content %}
 
 <!-- Display page-header -->
@@ -8,15 +8,13 @@
         <div class='col-md-6 ml-5'>
             <div class="page-header">
                 <br>
-                <h1>{{heading}}</h1>
+                <h1>{{ heading }}</h1>
             </div>
         </div>
     </div>
-
     <div class="col-md-6 ml-5">
-        {{wtf.render_form(form)}}
+        {{ render_form(form) }}
     </div>
-
     <!-- When you have login form, then show the user a link to register -->
     {% if heading|lower =='login' %}
     <div class="col-md-4 mb-5 ml-5">
