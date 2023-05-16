@@ -17,7 +17,6 @@ def check_field_length(form, field):
         #flash("Your entry was too short! Must be 5 or more characters (not including spaces)", 'warning')
         raise ValidationError('Your entry was too short! Must be 5 or more characters (not including spaces)')
 
-
 class EventForm(FlaskForm):
     title = StringField('Event Title', validators=[
                         InputRequired(message='Your event must have a title'), Length(min=3, max=50, message='Title must be between 4 and 50 characters'), check_field_length])
@@ -42,7 +41,6 @@ class EventForm(FlaskForm):
                              e.name.title() for e in EventCity], validators=[InputRequired(message='Your event must have a city it is located in')])
     submit = SubmitField('Create Event')
 
-
 class EditEventForm(FlaskForm):
     title = StringField('Event Title', validators=[
                         Length(min=3, max=50, message='Title cannot be more than 40 characters')])
@@ -66,12 +64,10 @@ class EditEventForm(FlaskForm):
                              e.name.title() for e in EventCity])
     submit = SubmitField('Update Event')
 
-
 class CommentForm(FlaskForm):
     text = TextAreaField('Leave a Comment:', validators=[
                          InputRequired(message="Your comment can't be blank"), check_field_length])
     submit = SubmitField('Submit')
-
 
 class BookingForm(FlaskForm):
     tickets_required = IntegerField(
@@ -82,7 +78,6 @@ class BookingForm(FlaskForm):
     #         raise ValidationError('Only whole numbers allowed')
     submit = SubmitField('Confirm Booking')
 
-
 class LoginForm(FlaskForm):
     user_name = StringField("User Name", validators=[
         InputRequired('Enter user name')])
@@ -91,7 +86,6 @@ class LoginForm(FlaskForm):
     remember = BooleanField("Remember me?",
                             default=True)
     submit = SubmitField("Login")
-
 
 class RegisterForm(FlaskForm):
     user_name = StringField("User Name", validators=[InputRequired(), Alpha(message='Can only contain alphabetical characters'), Length(

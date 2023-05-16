@@ -57,7 +57,7 @@
             <select name="genre" class="form-select">
                 <option value='' selected>Select a genre...</option>
                 {% for genre in genres %}
-                <option value="{{genre.name.lower()}}">{{genre.name.title()}}</option>
+                <option value="{{ genre.name.lower()  }}">{{ genre.name.title() }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -102,7 +102,7 @@
                     <h6 class='card-subtitle mb-2'>{{ event.event_genre.name.title() }}</h6>
                     {% endif %}
                     <p id='index-cards' class='card-text'>{{ event.description }}</p>
-                    <a href='{{url_for("events.show", id=event.id)}}' class='mt-auto btn btn-outline-dark'>See more</a>
+                    <a href='{{ url_for("events.show", id=event.id) }}' class='mt-auto btn btn-outline-dark'>See more</a>
                 </div>
             </div>
         </div>
@@ -122,7 +122,7 @@
                 <img id='genre-images' class='img-fluid shadow-lg  bg-white text-white rounded-circle border border-dark m-auto d-block'
                     src="{{ url_for('static', filename='images/{0}.png'.format(genre.name|lower)) }}">
                 <div class="d-flex justify-content-center">
-                    <p>{{genre.name.title()}}</p>
+                    <p>{{ genre.name.title() }}</p>
             </a>
         </div>
     </div>

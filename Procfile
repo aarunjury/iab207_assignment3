@@ -1,1 +1,0 @@
-web: gunicorn -w 2 'bookings:create_app()'

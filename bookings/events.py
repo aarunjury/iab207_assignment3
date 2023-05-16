@@ -1,7 +1,7 @@
 from datetime import datetime
-from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
+from flask import Blueprint, render_template, redirect, url_for, flash, current_app
 from flask_login.utils import login_required
-from .models import Event, Comment, EventCity, EventGenre, EventStatus, Booking
+from .models import Event, Comment, EventStatus, Booking
 from .forms import EditEventForm, EventForm, CommentForm, BookingForm
 from . import db
 import os
@@ -9,7 +9,6 @@ from werkzeug.utils import secure_filename
 from flask_login import current_user
 
 eventbp = Blueprint('events', __name__, url_prefix='/events')
-
 
 @eventbp.route('/<id>')
 def show(id):
@@ -22,12 +21,10 @@ def show(id):
     artist_events = Event.query.filter_by(headliner=event.headliner).all()
     return render_template('events/event_details.html', event=event, form=comments_form, booking_form=booking_form, artist_events=artist_events)
 
-
 @eventbp.route('/view_all')
 def view_all_events():
     events = Event.query.filter(Event.event_status != 'INACTIVE').all()
     return render_template('events/view_events.html', heading='All Events', events=events)
-
 
 @eventbp.route('/view_all/city/<city_name>')
 def view_events_city(city_name):
@@ -36,14 +33,12 @@ def view_events_city(city_name):
         Event.event_status != 'INACTIVE').all()
     return render_template('events/view_events.html', heading=city_name, events=city_events)
 
-
 @eventbp.route('/view_all/<genre>')
 def view_events(genre):
     genre = genre.upper()
     genre_events_list = Event.query.filter_by(event_genre=genre).filter(
         Event.event_status != 'INACTIVE').all()
     return render_template('events/view_events.html', heading=genre, events=genre_events_list)
-
 
 @eventbp.route('/view_all/artist/<headliner>')
 def view_events_artist(headliner):
@@ -52,7 +47,6 @@ def view_events_artist(headliner):
     if len(artist_events) == 1:
         return redirect(url_for('events.show', id=artist_events[0].id))
     return render_template('events/view_events.html', heading=headliner, events=artist_events)
-
 
 @eventbp.route('/create', methods=['GET', 'POST'])
 @login_required
@@ -79,7 +73,6 @@ def create():
         # Always end with redirect when form is valid
         return redirect(url_for('main.my_events'))
     return render_template('events/create_event.html', event_form=form, heading='Create a new Event')
-
 
 @eventbp.route('/<id>/update', methods=['GET', 'POST'])
 @login_required
@@ -127,7 +120,6 @@ def update_event(id):
         return redirect(url_for('main.my_events'))
     return render_template('events/create_event.html', event_form=form, event=event, heading='Edit Event')
 
-
 @eventbp.route('/<id>/delete', methods=['GET', 'POST'])
 @login_required
 def delete_event(id):
@@ -145,7 +137,6 @@ def delete_event(id):
     db.session.commit()
     return redirect(url_for('main.my_events'))
 
-
 @eventbp.route('/<id>/comment', methods=['GET', 'POST'])
 @login_required
 def comment(id):
@@ -162,7 +153,6 @@ def comment(id):
         flash('Your comment has been added', 'primary')
     # using redirect sends a GET request to destination.show
     return redirect(url_for('events.show', id=id))
-
 
 @eventbp.route('/<id>/book', methods=['GET', 'POST'])
 @login_required
@@ -185,7 +175,6 @@ def book_event(id):
             flash(flash_string,'success')
             return redirect(url_for('events.show', id=id))
     return redirect(url_for('events.show', id=id))
-
 
 def check_upload_file(form):
     # get file data from form

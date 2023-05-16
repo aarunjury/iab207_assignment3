@@ -4,18 +4,15 @@ from sqlalchemy import Enum, DateTime
 from flask_login import UserMixin, AnonymousUserMixin
 from enum import Enum
 
-
 class Anonymous(AnonymousUserMixin):
     def __init__(self):
         self.name = 'Guest'
-
 
 class EventStatus(Enum):
     UPCOMING = 1
     CANCELLED = 2
     BOOKED = 3
     INACTIVE = 4
-
 
 class EventGenre(Enum):
     DANCE = 1
@@ -25,14 +22,12 @@ class EventGenre(Enum):
     ROCK = 5
     OTHER = 6
 
-
 class EventCity(Enum):
     BRISBANE = 1
     MELBOURNE = 2
     SYDNEY = 3
     PERTH = 4
     ADELAIDE = 5
-
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'  # good practice to specify table name
@@ -52,7 +47,6 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         str = 'Name: {}. Email: {}'.format(self.name, self.emailid)
         return str
-
 
 class Event(db.Model):
     __tablename__ = 'events'
@@ -90,7 +84,6 @@ class Event(db.Model):
     def __hash__(self):
         return hash(('id', self.id))
 
-
 class Comment(db.Model):
     __tablename__ = 'comments'
     id = db.Column(db.Integer, primary_key=True, nullable=False)
@@ -103,7 +96,6 @@ class Comment(db.Model):
 
     def __repr__(self):
         return "<Comment: {}>".format(self.text)
-
 
 class Booking(db.Model):
     __tablename__ = 'bookings'

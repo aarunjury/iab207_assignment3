@@ -15,7 +15,6 @@ def is_current_user():
         name = current_user.name
     return name
 
-
 @authbp.route('/login', methods=['GET', 'POST'])
 def login():
     loginForm = LoginForm()
@@ -36,7 +35,6 @@ def login():
             flash('You logged in successfully', 'success')
             return redirect(url_for('main.index'))
     return render_template('user.html', form=loginForm, heading='Login')
-
 
 @authbp.route('/register', methods=['GET', 'POST'])
 def register():
@@ -64,7 +62,6 @@ def register():
         flash('Successfully created new user! Please login to continue.', 'success')
         return redirect(url_for('auth.login'))
     return render_template('user.html', form=form, heading='Register')
-
 
 @authbp.route("/logout")
 @login_required

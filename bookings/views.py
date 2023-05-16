@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request
-from .models import Event, EventCity, EventGenre, Booking
+from .models import Event
 from flask_login import login_required, current_user
 from . import db
 
@@ -31,7 +31,7 @@ def my_events():
     return render_template('events/my_events.html', heading='My Events', events=current_user.created_events)
 
     
-@mainbp.route('/search', methods=['GET','POST'])
+@mainbp.route('/search', methods=['GET', 'POST'])
 def search():
     # create query object
     query = db.session.query(Event)
@@ -57,4 +57,4 @@ def search():
             # Filter out duplicates (__eq__ has been set on the model for comparison)
             events = list(set(events))
     # return all events that meet the search criteria on a page
-    return render_template('events/view_events.html', heading='Search Results', events = events)
+    return render_template('events/view_events.html', heading='Search Results', events=events)
